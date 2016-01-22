@@ -1,11 +1,12 @@
-package edu.happy.roadrecord;
+package edu.tongji.roadrecord;
 
-import Detetction.CameraDetect;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import edu.happy.detetction.CameraDetect;
+import edu.happy.roadrecord.R;
 
 public class StartActivity extends Activity {
 
@@ -17,7 +18,7 @@ public class StartActivity extends Activity {
 		Detective = (Button)findViewById(R.id.detective);
 	}
 	
-	private void OnClick(View v){
+	public void onClick(View v){
 		Intent intent ;
 		switch(v.getId()){
 			case R.id.detective:
