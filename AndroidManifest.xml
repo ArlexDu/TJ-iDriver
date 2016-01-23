@@ -9,6 +9,7 @@
         android:targetSdkVersion="19" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
 
     <application
         android:allowBackup="true"
@@ -26,7 +27,9 @@
         </activity>
         <activity
             android:name="edu.happy.detetction.CameraDetect"
-            android:label="@string/title_activity_camera_detect" >
+            android:label="@string/title_activity_camera_detect"
+            android:screenOrientation="landscape"
+            android:configChanges="keyboardHidden|orientation" >
         </activity>
     </application>
 

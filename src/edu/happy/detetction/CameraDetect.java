@@ -6,6 +6,7 @@ import java.io.InputStream;
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.CameraBridgeViewBase;
 import org.opencv.android.CameraBridgeViewBase.CvCameraViewFrame;
+import org.opencv.android.CameraBridgeViewBase.CvCameraViewListener2;
 import org.opencv.android.LoaderCallbackInterface;
 import org.opencv.android.OpenCVLoader;
 import org.opencv.core.Core;
@@ -30,7 +31,7 @@ import android.view.WindowManager;
 import edu.happy.roadrecord.R;
 
 
-public class CameraDetect extends Activity implements CameraBridgeViewBase.CvCameraViewListener2{
+public class CameraDetect extends Activity implements CvCameraViewListener2{
 
 	
 	//opencv 摄像头的view
@@ -57,10 +58,12 @@ public class CameraDetect extends Activity implements CameraBridgeViewBase.CvCam
 	private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
 		
 		public void onManagerConnected(int status) {
+//			Log.i(TAG, "init");
 			switch (status) {
 			case LoaderCallbackInterface.SUCCESS:{
 				try{
 					FileOutputStream fos = new FileOutputStream(Environment.getExternalStorageDirectory()+"/face.xml");
+//					Log.i(TAG, "file path is " +Environment.getExternalStorageDirectory()+"/face.xml");
 					InputStream in = getResources().getAssets().open("lbpcascade_frontalface.xml");
 					byte[] buffer = new byte[8192];
 					int count = 0;
@@ -71,18 +74,21 @@ public class CameraDetect extends Activity implements CameraBridgeViewBase.CvCam
 					in.close();
 				//构造分类器
 				String xmlfilePath = null;
-				xmlfilePath = Environment.getExternalStorageDirectory()+"face.xml";
+				xmlfilePath = Environment.getExternalStorageDirectory()+"/face.xml";
 				Log.i(TAG, "file path is " +xmlfilePath);
 				mDetector = new CascadeClassifier(xmlfilePath);
 				mDetection = new MatOfRect();
+				camera.enableView();
 				Log.i(TAG, "load successful");
 				}catch (Exception e) {
 					// TODO: handle exception
 					e.printStackTrace();
+//					Log.i(TAG, "wrong");
 				}
 				break;
 			}
 			default:
+//				Log.i(TAG, "load failed");
 				super.onManagerConnected(status);
 				break;
 			}
@@ -102,11 +108,12 @@ public class CameraDetect extends Activity implements CameraBridgeViewBase.CvCam
 		camera = (CameraBridgeViewBase)findViewById(R.id.camera);
 		camera.setVisibility(View.VISIBLE);
 		camera.setCvCameraViewListener(this);
-		camera.enableView();
+//		Log.i(TAG, "create");
 	}
 	@Override
 	public void onCameraViewStarted(int width, int height) {
 		// TODO Auto-generated method stub
+//		Log.i(TAG, "mat");
 		mrgb = new Mat(height,width,CvType.CV_8UC4);
 	}
 	@Override
@@ -118,6 +125,7 @@ public class CameraDetect extends Activity implements CameraBridgeViewBase.CvCam
 	@Override
 	public Mat onCameraFrame(CvCameraViewFrame inputFrame) {
 		// TODO Auto-generated method stub
+//		Log.i(TAG, "frame");
 		mrgb = inputFrame.rgba();
 		gray = inputFrame.gray();
 		if(detectiveSize == 0){
@@ -127,7 +135,7 @@ public class CameraDetect extends Activity implements CameraBridgeViewBase.CvCam
 			}
 		}
 		if(getnew){//需要计算新的位置
-			
+			new MyThread().start();
 		}else{//直接沿用以前的位置不变
 			
 		}
@@ -147,7 +155,9 @@ public class CameraDetect extends Activity implements CameraBridgeViewBase.CvCam
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-		OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_2_4_9, this, mLoaderCallback);
+//		Log.i(TAG, "resume");
+		OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_2_4_11, this, mLoaderCallback);
+//		Log.i(TAG, "done");
 	}
 	
 	class MyThread extends Thread{
