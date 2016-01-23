@@ -27,6 +27,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import edu.happy.roadrecord.R;
 
@@ -62,9 +63,9 @@ public class CameraDetect extends Activity implements CvCameraViewListener2{
 			switch (status) {
 			case LoaderCallbackInterface.SUCCESS:{
 				try{
-					FileOutputStream fos = new FileOutputStream(Environment.getExternalStorageDirectory()+"/face.xml");
+					FileOutputStream fos = new FileOutputStream(Environment.getExternalStorageDirectory()+"/car.xml");
 //					Log.i(TAG, "file path is " +Environment.getExternalStorageDirectory()+"/face.xml");
-					InputStream in = getResources().getAssets().open("lbpcascade_frontalface.xml");
+					InputStream in = getResources().getAssets().open("car.xml");
 					byte[] buffer = new byte[8192];
 					int count = 0;
 					while((count = in.read(buffer))>=0){
@@ -74,7 +75,7 @@ public class CameraDetect extends Activity implements CvCameraViewListener2{
 					in.close();
 				//构造分类器
 				String xmlfilePath = null;
-				xmlfilePath = Environment.getExternalStorageDirectory()+"/face.xml";
+				xmlfilePath = Environment.getExternalStorageDirectory()+"/car.xml";
 				Log.i(TAG, "file path is " +xmlfilePath);
 				mDetector = new CascadeClassifier(xmlfilePath);
 				mDetection = new MatOfRect();
@@ -103,6 +104,7 @@ public class CameraDetect extends Activity implements CvCameraViewListener2{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.camera_detect);
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		camera = (CameraBridgeViewBase)findViewById(R.id.camera);
