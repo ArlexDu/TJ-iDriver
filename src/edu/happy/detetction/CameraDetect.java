@@ -7,6 +7,7 @@ import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.CameraBridgeViewBase;
 import org.opencv.android.CameraBridgeViewBase.CvCameraViewFrame;
 import org.opencv.android.CameraBridgeViewBase.CvCameraViewListener2;
+import org.opencv.android.JavaCameraView;
 import org.opencv.android.LoaderCallbackInterface;
 import org.opencv.android.OpenCVLoader;
 import org.opencv.core.Core;
@@ -36,7 +37,7 @@ public class CameraDetect extends Activity implements CvCameraViewListener2{
 
 	
 	//opencv 摄像头的view
-	private CameraBridgeViewBase camera;
+	private MyCamera camera;
 	private boolean mIsjavaCamera = true;
 	//图片矩阵
 	private Mat mrgb;
@@ -55,6 +56,11 @@ public class CameraDetect extends Activity implements CvCameraViewListener2{
 	//每两秒检测一次
 	private boolean getnew = true;
 	
+	static {
+		if(!OpenCVLoader.initDebug()){
+			
+		}
+	}
 	//链接opencv
 	private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
 		
@@ -107,7 +113,7 @@ public class CameraDetect extends Activity implements CvCameraViewListener2{
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.camera_detect);
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-		camera = (CameraBridgeViewBase)findViewById(R.id.camera);
+		camera = (MyCamera)findViewById(R.id.camera);
 		camera.setVisibility(View.VISIBLE);
 		camera.setCvCameraViewListener(this);
 //		Log.i(TAG, "create");
@@ -141,6 +147,8 @@ public class CameraDetect extends Activity implements CvCameraViewListener2{
 		}else{//直接沿用以前的位置不变
 			
 		}
+		float focus = camera.getfocus();
+//		Log.i(TAG, "focus is "+focus);
 		int num = 0;
 		for(Rect rect:mDetection.toArray()){
 			Core.rectangle(

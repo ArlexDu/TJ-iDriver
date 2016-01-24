@@ -4,10 +4,9 @@
     android:layout_height="match_parent"
      >
 
-	<org.opencv.android.JavaCameraView
+	<edu.happy.detetction.MyCamera
 	    android:layout_width="fill_parent"
 		android:layout_height="fill_parent"
-		android:id="@+id/camera"
-		/>
+		android:id="@+id/camera" />
 
 </RelativeLayout>
