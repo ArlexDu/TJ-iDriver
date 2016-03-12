@@ -1,4 +1,4 @@
-package edu.happy.detetction;
+package edu.happy.detection;
 
 import org.opencv.android.JavaCameraView;
 

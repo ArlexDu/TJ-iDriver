@@ -5,7 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import edu.happy.detetction.CameraDetect;
+import edu.happy.detection.CameraDetect;
+import edu.happy.roadrecord.MainActivity;
 import edu.happy.roadrecord.R;
 
 public class StartActivity extends Activity {
@@ -26,7 +27,8 @@ public class StartActivity extends Activity {
 				startActivity(intent);
 			break;
 			case R.id.map:
-				
+				intent = new Intent(this,MainActivity.class);
+				startActivity(intent);
 			break;
 		}
 	}

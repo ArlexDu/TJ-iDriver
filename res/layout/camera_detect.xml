@@ -4,9 +4,20 @@
     android:layout_height="match_parent"
      >
 
-	<edu.happy.detetction.MyCamera
+	<edu.happy.detection.MyCamera
 	    android:layout_width="fill_parent"
 		android:layout_height="fill_parent"
 		android:id="@+id/camera" />
+
+	<TextView
+	    android:id="@+id/distance"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentBottom="true"
+	    android:layout_centerHorizontal="true"
+	    android:layout_marginBottom="20dp"
+	    android:textColor="#00ff00"
+	    android:textSize="18sp"
+	    android:text="" />
 
 </RelativeLayout>

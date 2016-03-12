@@ -1,4 +1,4 @@
-package edu.happy.detetction;
+package edu.happy.detection;
 
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -30,6 +30,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.TextView;
 import edu.happy.roadrecord.R;
 
 
@@ -56,10 +57,11 @@ public class CameraDetect extends Activity implements CvCameraViewListener2{
 	//每两秒检测一次
 	private boolean getnew = true;
 	
-	static {
-		if(!OpenCVLoader.initDebug()){
-			
-		}
+	private DistanceTracker tracker;
+	
+	private TextView showdistance;
+	static{
+		System.loadLibrary("tracker");
 	}
 	//链接opencv
 	private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
@@ -86,6 +88,7 @@ public class CameraDetect extends Activity implements CvCameraViewListener2{
 				mDetector = new CascadeClassifier(xmlfilePath);
 				mDetection = new MatOfRect();
 				camera.enableView();
+				tracker  = new DistanceTracker();
 				Log.i(TAG, "load successful");
 				}catch (Exception e) {
 					// TODO: handle exception
@@ -104,7 +107,15 @@ public class CameraDetect extends Activity implements CvCameraViewListener2{
 	
 	Handler myHandler = new Handler(){
 		public void handleMessage(android.os.Message msg) {
-			getnew = true;
+			switch (msg.what) {
+			case 1:
+				getnew = true;
+				break;
+
+			default:
+				showdistance.setText(msg.obj+"米");
+				break;
+			}
 		}
 	};
 	@Override
@@ -116,6 +127,7 @@ public class CameraDetect extends Activity implements CvCameraViewListener2{
 		camera = (MyCamera)findViewById(R.id.camera);
 		camera.setVisibility(View.VISIBLE);
 		camera.setCvCameraViewListener(this);
+		showdistance = (TextView)findViewById(R.id.distance);
 //		Log.i(TAG, "create");
 	}
 	@Override
@@ -150,13 +162,35 @@ public class CameraDetect extends Activity implements CvCameraViewListener2{
 		float focus = camera.getfocus();
 //		Log.i(TAG, "focus is "+focus);
 		int num = 0;
+		int max = -1;
+//		获取识别出来的最大的车辆为比对车辆
 		for(Rect rect:mDetection.toArray()){
+			if(max == -1){
+				max = 0;
+			}
+			if (rect.width>mDetection.toArray()[max].width){
+				max = num;
+			}
+			num++;
+		}
+		Log.i(TAG, "max is "+max);
+//		显示最大的识别车辆
+		if(max != -1){
+			Rect rect = mDetection.toArray().clone()[max];
 			Core.rectangle(
 					mrgb, 
 					new Point(rect.x,rect.y),
 					new Point(rect.x+rect.width,rect.y+rect.height),
-					new Scalar(0,0,255));
-			++num;
+					new Scalar(0,255,0));
+			int length = tracker.GetDistance(mrgb.getNativeObjAddr(),rect.x+rect.width/2,rect.height);
+//			System.out.println("length is "+ length);
+//			if(length>0){
+				Message m = new Message();
+				m.what = 2;
+				m.obj = length;
+				myHandler.sendMessage(m);		
+//			}
+//		showdistance.setText(length+"米");
 		}
 		return mrgb;
 	}
@@ -169,7 +203,6 @@ public class CameraDetect extends Activity implements CvCameraViewListener2{
 		OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_2_4_11, this, mLoaderCallback);
 //		Log.i(TAG, "done");
 	}
-	
 	class MyThread extends Thread{
 		@Override
 		public void run() {
@@ -181,14 +214,14 @@ public class CameraDetect extends Activity implements CvCameraViewListener2{
 			if(!mDetection.empty()){
 				Log.i(TAG, "get result");
 				try{
-					sleep(2000);
+					sleep(30);
 				}catch(Exception e){
 					e.printStackTrace();
 				}
 				m.what = 1;
 				
 			}else{
-				m.what = 2;
+				m.what = 1;
 			}
 			myHandler.sendMessage(m);	
 		}
