@@ -223,11 +223,11 @@ int get_white(IplImage *img){
 			//放到grey里面，后面排序
 		}
 		quicksort(0,width,t);
-		int t_w=floor(width*0.6);
+		int t_w=floor(width*0.99);
 		white_aver+=grey[t][t_w];
 		//排序完取其中0.8*宽度地方大小的灰度，灰度比这个值大的都是白的，比这个值小的都是黑的
 	}
-	white_aver/=30;
+	white_aver/=40;
 	//cvShowImage("temp",temp);
 	return white_aver;
 }

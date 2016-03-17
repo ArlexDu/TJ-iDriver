@@ -70,7 +70,7 @@
         
         
         <activity
-            android:name="edu.tongji.roadrecord.StartActivity"
+            android:name="edu.tongji.roadrecord.Next"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -78,13 +78,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
+       <activity android:name="edu.tongji.roadrecord.StartActivity"></activity>
+        
         <activity
             android:name="edu.happy.detection.CameraDetect"
             android:label="@string/title_activity_camera_detect"
             android:screenOrientation="landscape"
             android:configChanges="keyboardHidden|orientation" >
         </activity>
-        <activity android:name="MainActivity"></activity>
+        <activity android:name="edu.happy.roadrecord.MainActivity"></activity>
     </application>
 
 </manifest>

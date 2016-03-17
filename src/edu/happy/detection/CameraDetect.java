@@ -30,12 +30,74 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.TextView;
+
 import edu.happy.roadrecord.R;
+
+import java.util.Timer;
+import java.util.TimerTask;
+
+import android.app.Activity;
+import android.content.Context;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.Window;
+import android.widget.TextView;
+import android.widget.Toast;
+
+
+import com.baidu.location.BDLocation;
+import com.baidu.location.BDLocationListener;
+import com.baidu.location.LocationClient;
+import com.baidu.location.LocationClientOption;
+
+
+import edu.happy.detection.MyOrientationListener.OnOrientationListener;
+import edu.happy.roadrecord.R;
+
+import com.baidu.mapapi.SDKInitializer;
+import com.baidu.mapapi.map.BaiduMap;
+import com.baidu.mapapi.map.BitmapDescriptor;
+import com.baidu.mapapi.map.BitmapDescriptorFactory;
+import com.baidu.mapapi.map.MapStatusUpdate;
+import com.baidu.mapapi.map.MapStatusUpdateFactory;
+import com.baidu.mapapi.map.MapView;
+import com.baidu.mapapi.map.MyLocationConfiguration;
+import com.baidu.mapapi.map.MyLocationConfiguration.LocationMode;
+import com.baidu.mapapi.map.MyLocationData;
+import com.baidu.mapapi.model.LatLng;
+
+
 
 
 public class CameraDetect extends Activity implements CvCameraViewListener2{
+	
+	//添加
+	
+    private Context context;
+    private static final String TAGA = "ACC";  
+    private static final String TAGG = "LOCAT";
+    //定位相关
+    private LocationClient mLocationClient;
+    private MyLocationListener mLocationListener;
+    
+  
+    private boolean isFirstIn = true;
+    private double mLatitude;
+    private double mLongtitude;
+    private double mSpeed;
+    
+    //自定义图标
 
+    private MyOrientationListener myOrientationListener;
+    private float mOrient; 
+    private double mCurrentX;
+    private double mCurrentY;
+    private double mCurrentZ;
+    
+	
+    //
 	
 	//opencv 摄像头的view
 	private MyCamera camera;
@@ -44,6 +106,8 @@ public class CameraDetect extends Activity implements CvCameraViewListener2{
 	private Mat mrgb;
 	//灰度图
 	private Mat gray;
+	//感兴趣区域
+	private Mat roi;
 	//识别矩形
 	private MatOfRect mDetection;
 	//分类器
@@ -121,7 +185,28 @@ public class CameraDetect extends Activity implements CvCameraViewListener2{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		
+		
+		//添加
+		
+	        
+	     
+	      
+	        //获取地图控件引用  
+	        this.context = this;
+	       
+	        
+		
+		//
+		
+		//
+	        
+	        
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+        SDKInitializer.initialize(getApplicationContext());  
+        
 		setContentView(R.layout.camera_detect);
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		camera = (MyCamera)findViewById(R.id.camera);
@@ -129,7 +214,11 @@ public class CameraDetect extends Activity implements CvCameraViewListener2{
 		camera.setCvCameraViewListener(this);
 		showdistance = (TextView)findViewById(R.id.distance);
 //		Log.i(TAG, "create");
+		//TIAN
+		initLocation();
 	}
+	
+	
 	@Override
 	public void onCameraViewStarted(int width, int height) {
 		// TODO Auto-generated method stub
@@ -148,8 +237,12 @@ public class CameraDetect extends Activity implements CvCameraViewListener2{
 //		Log.i(TAG, "frame");
 		mrgb = inputFrame.rgba();
 		gray = inputFrame.gray();
+//		width:1280 height:720
+//		Log.i(TAG,"height is "+mrgb.rows());
+//		Log.i(TAG, "width is "+mrgb.cols());
+		roi = gray.submat(0,gray.rows(),gray.cols()/5,gray.cols()/5*4);
 		if(detectiveSize == 0){
-			int height = gray.rows();
+			int height = roi.rows();
 			if(Math.round(height*smaller)>0){
 				detectiveSize = Math.round(height*smaller);
 			}
@@ -179,7 +272,7 @@ public class CameraDetect extends Activity implements CvCameraViewListener2{
 			Rect rect = mDetection.toArray().clone()[max];
 			Core.rectangle(
 					mrgb, 
-					new Point(rect.x,rect.y),
+					new Point(gray.cols()/5+rect.x,rect.y),
 					new Point(rect.x+rect.width,rect.y+rect.height),
 					new Scalar(0,255,0));
 			int length = tracker.GetDistance(mrgb.getNativeObjAddr(),rect.x+rect.width/2,rect.height);
@@ -209,7 +302,7 @@ public class CameraDetect extends Activity implements CvCameraViewListener2{
 			// TODO Auto-generated method stub
 			Message m = new Message();
 			getnew  = false;
-			mDetector.detectMultiScale(gray, mDetection, 1.1, 2, 2, new Size(detectiveSize,detectiveSize),
+			mDetector.detectMultiScale(roi, mDetection, 1.1, 2, 2, new Size(detectiveSize,detectiveSize),
 					new Size());
 			if(!mDetection.empty()){
 				Log.i(TAG, "get result");
@@ -226,4 +319,148 @@ public class CameraDetect extends Activity implements CvCameraViewListener2{
 			myHandler.sendMessage(m);	
 		}
 	}
+	
+	
+	/////////////////////////////////////////////////
+    @Override
+    protected void onStart() {
+    	// TODO Auto-generated method stub
+    	super.onStart();
+    	
+    	if(!mLocationClient.isStarted())
+      	  mLocationClient.start();
+    	
+    	myOrientationListener.start();
+    	
+    }
+
+
+    @Override
+    protected void onStop() {
+    	// TODO Auto-generated method stub
+    	super.onStop();
+  
+    	mLocationClient.stop();
+    	
+    	myOrientationListener.stop();
+    }
+    
+    private void initLocation() {
+		// TODO Auto-generated method stub
+		mLocationClient = new LocationClient(this);
+		mLocationListener =new MyLocationListener();
+		mLocationClient.registerLocationListener(mLocationListener);
+		
+		LocationClientOption option = new LocationClientOption();
+		option.setCoorType("bd09ll");
+		option.setIsNeedAddress(true);
+		option.setOpenGps(true);
+		option.setScanSpan(1000);
+		option.setLocationMode(com.baidu.location.LocationClientOption.LocationMode.Hight_Accuracy);
+		
+		mLocationClient.setLocOption(option); 
+		//初始化图标
+	
+		
+		myOrientationListener = new MyOrientationListener(context);
+	
+        myOrientationListener.setOnOrientationListener(new OnOrientationListener() {
+			
+			@Override
+			public void onOrientationChanged(float x) {
+				// TODO Auto-generated method stub
+			   mOrient = x;
+			   
+			   
+			}
+
+			@Override
+			public void onOrientationChangAll(float x, float y, float z) {
+				mCurrentX = x;
+				mCurrentY = y;
+				mCurrentZ = z;
+	            Log.i(TAGA,"\n x: "+ mCurrentX);  
+	            Log.i(TAGA,"\n y: "+ mCurrentY);  
+	            Log.i(TAGA,"\n z: "+ mCurrentZ);  
+			}
+		});
+        
+        
+        
+    }
+    
+    
+    private class MyLocationListener implements BDLocationListener
+    {
+
+		@Override
+		public void onReceiveLocation(BDLocation location) {
+
+			MyLocationData data = new MyLocationData.Builder()//
+			.direction(mOrient)//
+			.accuracy(location.getRadius())//
+			.latitude(location.getLatitude())//
+			.longitude(location.getLongitude())//
+			.build();
+			
+		
+		
+		
+
+		  
+		    
+		    //更新经纬度
+			mLatitude = location.getLatitude();
+			mLongtitude = location.getLongitude();			
+			mSpeed = location.getSpeed();
+			
+            Log.i(TAGG,"\n LAT: "+ mLatitude);  
+            Log.i(TAGG,"\n LONG: "+ mLongtitude);  
+            Log.i(TAGG,"\n SPEED: "+ mSpeed);  
+            
+        
+			if(isFirstIn)
+			{
+			
+				isFirstIn = false;
+				
+				Toast.makeText(context,location.getAddrStr(), Toast.LENGTH_SHORT).show();
+				Toast.makeText(context,mLatitude+","+mLongtitude, Toast.LENGTH_SHORT).show();
+				Toast.makeText(context,mCurrentX+","+mCurrentY, Toast.LENGTH_SHORT).show();
+				
+				
+				
+			    TimerTask task = new TimerTask() {
+					
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						String url = "http://192.168.1.105:5555/andinfor.php";
+						new HttpThreadRegist(url, mLatitude, mLongtitude, mCurrentX, mCurrentY, mCurrentZ).start();	
+					 
+					}
+				};
+				Timer timer = new Timer(true);
+				timer.schedule(task,3000, 2000);	     
+			
+			  
+			}
+			
+		}
+    	
+    }
+	
+	
+	
+	
+	
+	
 }
+
+
+
+
+
+
+///////////////////////////////////////
+

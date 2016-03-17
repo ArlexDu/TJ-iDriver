@@ -2,29 +2,71 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="edu.tongji.roadrecord.StartActivity" >
+    android:background="#000000"
+    tools:context="com.example.changes.MainActivity" >
 
-
-    <Button
-        android:id="@+id/detective"
+    <TextView
+        android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="90dp"
-        android:onClick="onClick"
-        android:text="Detective" />
+        android:layout_marginLeft="200dp"
+        android:text="@string/hello_world" 
+        />
+
     
-    <Button
-        android:id="@+id/map"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <ImageView
+        android:id="@+id/select_button"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="150dp"
+        android:layout_alignParentBottom="true"
+        android:src="@drawable/functionbutton"
+        android:layout_marginBottom="5dp"
         android:onClick="onClick"
-        android:text="Map" />
+        android:visibility="visible" />
+    
+    <ImageView
+            android:id="@+id/cancel_button"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="5dp"
+            android:onClick="onClick"
+            android:src="@drawable/functionbutton"
+            android:visibility="invisible" />
+    <ImageView
+        android:id="@+id/map"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:src="@drawable/functionbutton"
+        android:layout_marginBottom="100dp"
+        android:onClick="onClick"
+        android:visibility="visible" />
+    
+    <ImageView
+            android:id="@+id/camera"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_toLeftOf="@+id/map"
+            android:layout_marginRight="50dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="100dp"
+            android:onClick="onClick"
+            android:src="@drawable/functionbutton"
+            android:visibility="visible" />
+    <ImageView
+            android:id="@+id/people"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_toRightOf="@+id/map"
+            android:layout_marginLeft="50dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="100dp"
+            android:onClick="onClick"
+            android:src="@drawable/functionbutton"
+            android:visibility="visible" />
 
 </RelativeLayout>
