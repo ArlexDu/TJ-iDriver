@@ -7,21 +7,20 @@
     <uses-sdk
         android:minSdkVersion="19"
         android:targetSdkVersion="19" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.CAMERA"/>
-  
-   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-	<uses-permission android:name="android.permission.INTERNET"/>
-	<uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
-	<uses-permission android:name="android.permission.WAKE_LOCK"/>
-	<uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-	<uses-permission android:name="android.permission.GET_TASKS" />
-	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-	<uses-permission android:name="android.permission.WRITE_SETTINGS" />
-	
-	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" >
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" >
     </uses-permission>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" >
     </uses-permission>
@@ -43,20 +42,17 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
-    
-    
-    
-    
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
+        android:name="edu.tongji.people.MyApplication"
         android:theme="@style/AppTheme" >
-        
-          <meta-data  
-        android:name="com.baidu.lbsapi.API_KEY"  
-        android:value="hjLB4Nj4TP29k9pwD7lTjrbY" />  
-        
+        <meta-data
+            android:name="com.baidu.lbsapi.API_KEY"
+            android:value="hjLB4Nj4TP29k9pwD7lTjrbY" />
+
         <service
             android:name="com.baidu.location.f"
             android:enabled="true"
@@ -66,9 +62,7 @@
                 </action>
             </intent-filter>
         </service>
-        
-        
-        
+
         <activity
             android:name="edu.tongji.roadrecord.Next"
             android:label="@string/app_name" >
@@ -78,16 +72,24 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        
-       <activity android:name="edu.tongji.roadrecord.StartActivity"></activity>
-        
+        <activity android:name="edu.tongji.roadrecord.StartActivity" >
+        </activity>
         <activity
             android:name="edu.happy.detection.CameraDetect"
+            android:configChanges="keyboardHidden|orientation"
             android:label="@string/title_activity_camera_detect"
-            android:screenOrientation="landscape"
-            android:configChanges="keyboardHidden|orientation" >
+            android:screenOrientation="landscape" >
         </activity>
-        <activity android:name="edu.happy.roadrecord.MainActivity"></activity>
+        <activity android:name=".MainActivity" >
+        </activity>
+        <activity
+            android:name="edu.tongji.people.LoginActivity"
+            android:label="@string/title_activity_login" >
+        </activity>
+        <activity
+            android:name="edu.tongji.people.PeopleAnalyze"
+             >
+        </activity>
     </application>
 
 </manifest>

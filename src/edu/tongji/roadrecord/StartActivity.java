@@ -1,17 +1,20 @@
 package edu.tongji.roadrecord;
 
 
+import java.io.File;
+
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnGestureListener;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnTouchListener;
 import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
@@ -21,6 +24,8 @@ import android.widget.ViewFlipper;
 import edu.happy.detection.CameraDetect;
 import edu.happy.roadrecord.MainActivity;
 import edu.happy.roadrecord.R;
+import edu.tongji.people.LoginActivity;
+import edu.tongji.people.PeopleAnalyze;
 
 public class StartActivity extends Activity implements OnGestureListener {
 
@@ -47,11 +52,28 @@ public class StartActivity extends Activity implements OnGestureListener {
 		people = (ImageView)findViewById(R.id.people);
 		flipper = (ViewFlipper) findViewById(R.id.flipper);
 		mGestureDetector = new GestureDetector(this);
+		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 		initanim();
+		firstuse();
 		displayRatio_selelct(currentPage);
 		thread.start();
 	}
-	
+	//仅第一次登陆才会打开数据库建立
+	private void firstuse(){
+		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+		int first = preferences.getInt("open", 0);
+//		System.out.println("open ："+first);
+		SharedPreferences.Editor editor = preferences.edit();
+		//第一次登陆  
+		if(first == 0){
+			int userid = -100;
+			editor.putInt("userid", userid);
+		}
+		first++;
+		editor.putInt("open", first);
+		editor.commit();
+		
+	}
 	public void onClick(View v){
 		Intent intent;
 		switch(v.getId()){
@@ -73,9 +95,15 @@ public class StartActivity extends Activity implements OnGestureListener {
 			startActivity(intent);
 			break;	
 		case R.id.people:
-//			intent = new Intent(MainActivity.this,WriteActivity.class);
+			SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+			int uid = preferences.getInt("userid", -100);
+			if(uid == -100){//需要登录或者注册
+				intent = new Intent(StartActivity.this,LoginActivity.class);
+			}else{
+				intent = new Intent(StartActivity.this,PeopleAnalyze.class);
+			}
 			initanim();
-//			startActivity(intent);
+			startActivity(intent);
 			break;	
 		}
 	}
