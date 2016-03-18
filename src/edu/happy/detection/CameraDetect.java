@@ -32,6 +32,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import edu.happy.roadrecord.R;
+import edu.tongji.roadrecord.HProgress;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -124,6 +125,9 @@ public class CameraDetect extends Activity implements CvCameraViewListener2{
 	private DistanceTracker tracker;
 	
 	private TextView showdistance;
+	
+	//ÌáÊ¾Ìõ
+	private HProgress progress;
 	static{
 		System.loadLibrary("tracker");
 	}
@@ -213,10 +217,12 @@ public class CameraDetect extends Activity implements CvCameraViewListener2{
 		camera.setVisibility(View.VISIBLE);
 		camera.setCvCameraViewListener(this);
 		showdistance = (TextView)findViewById(R.id.distance);
+		progress = (HProgress) findViewById(R.id.notice);
 //		Log.i(TAG, "create");
 		//TIAN
 		initLocation();
 	}
+	
 	
 	
 	@Override
@@ -240,7 +246,7 @@ public class CameraDetect extends Activity implements CvCameraViewListener2{
 //		width:1280 height:720
 //		Log.i(TAG,"height is "+mrgb.rows());
 //		Log.i(TAG, "width is "+mrgb.cols());
-		roi = gray.submat(0,gray.rows(),gray.cols()/5,gray.cols()/5*4);
+		roi = gray.submat(gray.rows()/4,gray.rows(),gray.cols()/4,gray.cols()/4*3);
 		if(detectiveSize == 0){
 			int height = roi.rows();
 			if(Math.round(height*smaller)>0){
@@ -272,8 +278,8 @@ public class CameraDetect extends Activity implements CvCameraViewListener2{
 			Rect rect = mDetection.toArray().clone()[max];
 			Core.rectangle(
 					mrgb, 
-					new Point(gray.cols()/5+rect.x,rect.y),
-					new Point(rect.x+rect.width,rect.y+rect.height),
+					new Point(gray.cols()/4+rect.x,rect.y+gray.rows()/4),
+					new Point(gray.cols()/4+rect.x+rect.width,rect.y+rect.height+gray.rows()/4),
 					new Scalar(0,255,0));
 			int length = tracker.GetDistance(mrgb.getNativeObjAddr(),rect.x+rect.width/2,rect.height);
 //			System.out.println("length is "+ length);

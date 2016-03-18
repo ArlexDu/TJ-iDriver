@@ -2,71 +2,114 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000"
+    android:background="#ffffff"
     tools:context="com.example.changes.MainActivity" >
 
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="200dp"
-        android:text="@string/hello_world" 
-        />
+   <ViewFlipper
+        android:id="@+id/flipper"
+        android:layout_width="match_parent"
+        android:layout_above="@+id/move_radio"
+        android:layout_height="match_parent" >
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerInside"
+                android:background="@drawable/map_show" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/car_show" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/people_show" />
+        </LinearLayout>
+
+    </ViewFlipper>
+    <RelativeLayout
+        android:id="@+id/move_radio" 
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_above="@+id/camera"
+        android:layout_marginBottom="10dp"
+        >
+         	<include  layout="@layout/home_ratio_img"/>  
+    </RelativeLayout>
     
     <ImageView
         android:id="@+id/select_button"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
-        android:src="@drawable/functionbutton"
+        android:layout_centerHorizontal="true"
         android:layout_marginBottom="5dp"
         android:onClick="onClick"
+        android:src="@drawable/functionbutton"
         android:visibility="visible" />
-    
+
     <ImageView
-            android:id="@+id/cancel_button"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="5dp"
-            android:onClick="onClick"
-            android:src="@drawable/functionbutton"
-            android:visibility="invisible" />
+        android:id="@+id/cancel_button"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="5dp"
+        android:onClick="onClick"
+        android:src="@drawable/functionbutton"
+        android:visibility="invisible" />
+
     <ImageView
         android:id="@+id/map"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
-        android:src="@drawable/functionbutton"
-        android:layout_marginBottom="100dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="90dp"
         android:onClick="onClick"
+        android:src="@drawable/map_icon"
         android:visibility="visible" />
-    
+
     <ImageView
-            android:id="@+id/camera"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_toLeftOf="@+id/map"
-            android:layout_marginRight="50dp"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="100dp"
-            android:onClick="onClick"
-            android:src="@drawable/functionbutton"
-            android:visibility="visible" />
+        android:id="@+id/camera"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="90dp"
+        android:layout_marginRight="50dp"
+        android:layout_toLeftOf="@+id/map"
+        android:onClick="onClick"
+        android:src="@drawable/camera_icon"
+        android:visibility="visible" />
+
     <ImageView
-            android:id="@+id/people"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_toRightOf="@+id/map"
-            android:layout_marginLeft="50dp"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="100dp"
-            android:onClick="onClick"
-            android:src="@drawable/functionbutton"
-            android:visibility="visible" />
+        android:id="@+id/people"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="90dp"
+        android:layout_marginLeft="50dp"
+        android:layout_toRightOf="@+id/map"
+        android:onClick="onClick"
+        android:src="@drawable/people_icon"
+        android:visibility="visible" />
 
 </RelativeLayout>

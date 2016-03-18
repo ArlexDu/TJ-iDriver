@@ -11,7 +11,11 @@ public final class R {
     public static final class anim {
         public static final int black_cancel=0x7f040000;
         public static final int cancel_rotate=0x7f040001;
-        public static final int select_rotate=0x7f040002;
+        public static final int push_left_in=0x7f040002;
+        public static final int push_left_out=0x7f040003;
+        public static final int push_right_in=0x7f040004;
+        public static final int push_right_out=0x7f040005;
+        public static final int select_rotate=0x7f040006;
     }
     public static final class attr {
         /** <p>May be an integer value, such as "<code>100</code>".
@@ -53,39 +57,54 @@ containing a value of this type.
         public static final int activity_vertical_margin=0x7f050001;
     }
     public static final class drawable {
-        public static final int functionbutton=0x7f020000;
-        public static final int ic_launcher=0x7f020001;
-        public static final int navi_map_gps_locked=0x7f020002;
-        public static final int pointer=0x7f020003;
+        public static final int camera_icon=0x7f020000;
+        public static final int car_show=0x7f020001;
+        public static final int functionbutton=0x7f020002;
+        public static final int home_img_ratio=0x7f020003;
+        public static final int home_img_ratio_selected=0x7f020004;
+        public static final int ic_launcher=0x7f020005;
+        public static final int map_icon=0x7f020006;
+        public static final int map_show=0x7f020007;
+        public static final int navi_map_gps_locked=0x7f020008;
+        public static final int people_icon=0x7f020009;
+        public static final int people_show=0x7f02000a;
+        public static final int pointer=0x7f02000b;
+        public static final int ratio_img_style=0x7f02000c;
     }
     public static final class id {
-        public static final int action_settings=0x7f09000c;
+        public static final int action_settings=0x7f090011;
         public static final int any=0x7f090000;
         public static final int back=0x7f090001;
-        public static final int camera=0x7f090008;
-        public static final int cancel_button=0x7f090006;
-        public static final int distance=0x7f09000a;
+        public static final int camera=0x7f090006;
+        public static final int cancel_button=0x7f090008;
+        public static final int distance=0x7f09000b;
+        public static final int flipper=0x7f090004;
         public static final int front=0x7f090002;
+        public static final int home_ratio_img_01=0x7f09000d;
+        public static final int home_ratio_img_02=0x7f09000e;
+        public static final int home_ratio_img_03=0x7f09000f;
         public static final int id_bmapView=0x7f090003;
-        public static final int id_map_common=0x7f09000d;
-        public static final int id_map_location=0x7f090010;
-        public static final int id_map_site=0x7f09000e;
-        public static final int id_map_traffic=0x7f09000f;
-        public static final int id_mode_compass=0x7f090013;
-        public static final int id_mode_following=0x7f090012;
-        public static final int id_mode_normal=0x7f090011;
-        public static final int map=0x7f090007;
-        public static final int people=0x7f090009;
-        public static final int select_button=0x7f090005;
-        public static final int text=0x7f09000b;
-        public static final int textView1=0x7f090004;
+        public static final int id_map_common=0x7f090012;
+        public static final int id_map_location=0x7f090015;
+        public static final int id_map_site=0x7f090013;
+        public static final int id_map_traffic=0x7f090014;
+        public static final int id_mode_compass=0x7f090018;
+        public static final int id_mode_following=0x7f090017;
+        public static final int id_mode_normal=0x7f090016;
+        public static final int map=0x7f090009;
+        public static final int move_radio=0x7f090005;
+        public static final int notice=0x7f09000c;
+        public static final int people=0x7f09000a;
+        public static final int select_button=0x7f090007;
+        public static final int text=0x7f090010;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
         public static final int activity_start=0x7f030001;
         public static final int camera_detect=0x7f030002;
-        public static final int next=0x7f030003;
-        public static final int test=0x7f030004;
+        public static final int home_ratio_img=0x7f030003;
+        public static final int next=0x7f030004;
+        public static final int test=0x7f030005;
     }
     public static final class menu {
         public static final int camera_detect=0x7f080000;

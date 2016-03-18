@@ -16,7 +16,7 @@
 using namespace std;
 using namespace cv;
 
-int grey[41][201];
+int data[10000]; //全局
 int total=0,total_weight=0;
 CvSize size_of_img =cvSize(400,400);
 CvPoint p1[400],p2[400],p3[400],p4[400];
@@ -42,9 +42,9 @@ PointandNumber get_point(const vector<Vec4i>& liness,IplImage *img){
 	int	point_x[100000],x_ave=0,
 		point_y[100000],y_ave=0,
 		k=0;
-		printf("detect: %d lines\n",liness.size());
+//		printf("detect: %d lines\n",liness.size());
 	if(liness.size()==0){
-		printf("no lines detected \n");
+//		printf("no lines detected \n");
 		ans.k=-233;
 		ans.point_o=cvPoint(-233,-233);
 		return ans;
@@ -96,7 +96,7 @@ PointandNumber get_point(const vector<Vec4i>& liness,IplImage *img){
 		}
 	}
 	if(k==0){
-		printf("no points left after selected stage1 \n");
+//		printf("no points left after selected stage1 \n");
 		ans.k=-233;
 		ans.point_o=cvPoint(-233,-233);
 		return ans;
@@ -123,7 +123,7 @@ PointandNumber get_point(const vector<Vec4i>& liness,IplImage *img){
 			point_y[ii] = temp;
 			k--;
 			if(k==0){
-			printf("no points left after selected stage2 \n");
+//			printf("no points left after selected stage2 \n");
 			ans.k=-233;
 			ans.point_o=cvPoint(-233,-233);
 			return ans;
@@ -146,7 +146,7 @@ PointandNumber get_point(const vector<Vec4i>& liness,IplImage *img){
 			point_y[ii] = temp;
 			k--;
 			if(k==0){
-			printf("no points left after selected stage3 \n");
+//			printf("no points left after selected stage3 \n");
 			ans.k=-233;
 			ans.point_o=cvPoint(-233,-233);
 			return ans;
@@ -157,7 +157,7 @@ PointandNumber get_point(const vector<Vec4i>& liness,IplImage *img){
 		ii++;
 	}
 
-	cout<<"total points:"<<k<<endl;
+//	cout<<"total points:"<<k<<endl;
 	ans.point_o=cvPoint(x_ave,y_ave);
 	ans.k=k;
 	return ans;
@@ -177,57 +177,62 @@ void drawDetectLines(IplImage *img,const vector<Vec4i>& lines,Scalar &color)
     }
 }
 
-void quicksort(int left,int right,int k)
+void qsort(int left,int right)
 //从小到大排序，left左指针，right右指针，k表示行
 {
     int i,j,t,temp;
     if(left>right)
        return;
-	temp=grey[k][left];
+	temp=data[left];
     i=left;
     j=right;
     while(i!=j)
     {
-		while(grey[k][j]>=temp && i<j)
+		while(data[j]>=temp && i<j)
 			j--;
-		while(grey[k][i]<=temp && i<j)
+		while(data[i]<=temp && i<j)
             i++;
 		if(i<j)
 		{
-			t=grey[k][i];
-			grey[k][i]=grey[k][j];
-			grey[k][j]=t;
+			t=data[i];
+			data[i]=data[j];
+			data[j]=t;
 		}
     }
-	grey[k][left]=grey[k][i];
-	grey[k][i]=temp;
-	quicksort(left,i-1,k);
-	quicksort(i+1,right,k);
+	data[left]=data[i];
+	data[i]=temp;
+	qsort(left,i-1);
+	qsort(i+1,right);
 }
 
+
 int get_white(IplImage *img){
-	int i,j;
+	int i = 0,j = 0;
 	int height=img->height;
 	int width=img->width;
 	int step=img->widthStep/sizeof(uchar);
 	//int b[15][210],g[15][210],r[15][210];
-	int data[401],white_aver=0;
+	int white_aver=0;
 	//IplImage *temp=img;
 	int t;
-	for(i=floor(height*0.7);i<height*0.7+40;i++)
+	int data_i=0;
+	int gap_height=50;
+	int start_height=floor(height*0.7);
+	for(i=start_height;i<floor(start_height+gap_height);i++)
 	{
-		t=i-floor(height*0.7);
-		for(j=0;j<width;j++){
-			data[j]=((uchar*)(img->imageData + img->widthStep*i))[j];
-			grey[t][j]=data[j];
+		t=i-start_height;
+		for(j=120-t;j<width-120+t;j++){
+			data_i++;
+			data[data_i]=((uchar*)(img->imageData + img->widthStep*i))[j];
+			//grey[t][j]=data[j];
 			//放到grey里面，后面排序
 		}
-		quicksort(0,width,t);
-		int t_w=floor(width*0.99);
-		white_aver+=grey[t][t_w];
-		//排序完取其中0.8*宽度地方大小的灰度，灰度比这个值大的都是白的，比这个值小的都是黑的
 	}
-	white_aver/=40;
+	qsort(1,data_i);
+	int t_w=floor(data_i*0.99);
+	white_aver=data[t_w];
+	//排序完取其中0.6*宽度地方大小的灰度，灰度比这个值大的都是白的，比这个值小的都是黑的
+	//white_aver/=gap_height;
 	//cvShowImage("temp",temp);
 	return white_aver;
 }
@@ -279,7 +284,7 @@ int get_alfa_and_beta_X_Y(pack ans,int c,int r,int H){//c:车底边width坐标，r：车
 		return -233;
 	int c0=cvGetSize(ans.img).width/2;
 	int r0=cvGetSize(ans.img).height/2;
-	double fc=3.79*2.83;//  =摄像头焦距/像素宽度；
+	double fc=500;///3.79*2.83;//  =摄像头焦距/像素宽度；
 	double alfa=atan((r0-rd)/fc);
 	double beta=atan((cd-c0)/fc*cos(alfa));
 	int Z=(c-c0)*sin(beta)-(r-r0)*sin(alfa)*cos(beta)+cos(alfa)*cos(beta)*fc;
@@ -294,10 +299,10 @@ int get_alfa_and_beta_X_Y(pack ans,int c,int r,int H){//c:车底边width坐标，r：车
 
 JNIEXPORT jint JNICALL Java_edu_happy_detection_DistanceTracker_GetDistance
   (JNIEnv * env, jobject jo, jlong ptr, jint x, jint y){
-    Mat *ptrRgb = (Mat *)ptr;
-    Mat imageGray ;
-    cvtColor ( * ptrRgb , imageGray , CV_RGBA2GRAY ) ;
-    IplImage img = imageGray;
+    Mat *ptrgray = (Mat *)ptr;
+//    Mat imageGray ;
+//    cvtColor ( * ptrRgb , imageGray , CV_RGBA2GRAY ) ;
+    IplImage img = *ptrgray;
     IplImage *img_resize= cvCreateImage(size_of_img,IPL_DEPTH_8U,1);
     int white_aver=get_white(img_resize);
     pack ans;
