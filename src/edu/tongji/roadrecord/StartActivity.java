@@ -24,7 +24,7 @@ import android.widget.ViewFlipper;
 import edu.happy.detection.CameraDetect;
 import edu.happy.roadrecord.MainActivity;
 import edu.happy.roadrecord.R;
-import edu.tongji.people.LoginActivity;
+import edu.tongji.people.RegisterActivity;
 import edu.tongji.people.PeopleAnalyze;
 
 public class StartActivity extends Activity implements OnGestureListener {
@@ -98,7 +98,7 @@ public class StartActivity extends Activity implements OnGestureListener {
 			SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
 			int uid = preferences.getInt("userid", -100);
 			if(uid == -100){//需要登录或者注册
-				intent = new Intent(StartActivity.this,LoginActivity.class);
+				intent = new Intent(StartActivity.this,RegisterActivity.class);
 			}else{
 				intent = new Intent(StartActivity.this,PeopleAnalyze.class);
 			}

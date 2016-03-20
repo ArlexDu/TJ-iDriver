@@ -90,7 +90,7 @@ containing a value of this type.
         public static final int home_ratio_img_01=0x7f090016;
         public static final int home_ratio_img_02=0x7f090017;
         public static final int home_ratio_img_03=0x7f090018;
-        public static final int id_bmapView=0x7f09000c;
+        public static final int id_bmapView=0x7f09000b;
         public static final int id_map_common=0x7f09001b;
         public static final int id_map_location=0x7f09001e;
         public static final int id_map_site=0x7f09001c;
@@ -101,10 +101,10 @@ containing a value of this type.
         public static final int loginPanel=0x7f090004;
         public static final int map=0x7f090012;
         public static final int move_radio=0x7f09000e;
-        public static final int newuser=0x7f09000a;
         public static final int notice=0x7f090015;
+        public static final int olduser=0x7f09000c;
         public static final int people=0x7f090013;
-        public static final int progressBar1=0x7f09000b;
+        public static final int progressBar1=0x7f09000a;
         public static final int pwdEt=0x7f090008;
         public static final int screen=0x7f090003;
         public static final int select_button=0x7f090010;
@@ -117,26 +117,31 @@ containing a value of this type.
         public static final int activity_login=0x7f030000;
         public static final int activity_main=0x7f030001;
         public static final int activity_people_analyze=0x7f030002;
-        public static final int activity_start=0x7f030003;
-        public static final int camera_detect=0x7f030004;
-        public static final int home_ratio_img=0x7f030005;
-        public static final int next=0x7f030006;
-        public static final int test=0x7f030007;
+        public static final int activity_register=0x7f030003;
+        public static final int activity_show_chart=0x7f030004;
+        public static final int activity_start=0x7f030005;
+        public static final int camera_detect=0x7f030006;
+        public static final int home_ratio_img=0x7f030007;
+        public static final int next=0x7f030008;
+        public static final int test=0x7f030009;
     }
     public static final class menu {
         public static final int camera_detect=0x7f080000;
         public static final int login=0x7f080001;
         public static final int main=0x7f080002;
         public static final int people_analyze=0x7f080003;
-        public static final int start=0x7f080004;
+        public static final int show_chart=0x7f080004;
+        public static final int start=0x7f080005;
     }
     public static final class string {
         public static final int action_settings=0x7f060002;
         public static final int app_name=0x7f060000;
         public static final int hello_world=0x7f060001;
+        public static final int olduser=0x7f060007;
         public static final int title_activity_camera_detect=0x7f060003;
         public static final int title_activity_login=0x7f060004;
         public static final int title_activity_people_analyze=0x7f060005;
+        public static final int title_activity_show_chart=0x7f060006;
     }
     public static final class style {
         /** 

@@ -4,8 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.Html;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -13,9 +15,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import edu.happy.roadrecord.R;
 
-public class LoginActivity extends Activity {
+public class RegisterActivity extends Activity {
 
-	private TextView username, password;
+	private TextView username, password, olduser;
 	private Button register;
 	private NetWorkAccess access;
 	private ProgressBar bar;
@@ -24,9 +26,10 @@ public class LoginActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		setContentView(R.layout.activity_login);
+		setContentView(R.layout.activity_register);
 		username = (TextView) findViewById(R.id.accountEt);
 		password = (TextView) findViewById(R.id.pwdEt);
+		olduser = (TextView) findViewById(R.id.olduser);
 		register = (Button) findViewById(R.id.subBtn);
 		bar = (ProgressBar) findViewById(R.id.progressBar1);
 		access = new NetWorkAccess();
@@ -43,9 +46,14 @@ public class LoginActivity extends Activity {
 					Map<String, String> map = new HashMap<String, String>();
 					map.put("uname", uname);
 					map.put("upassword", pw);
-					access.ChangeInfo("", mhandler, 0, map);
+					access.ChangeInfo("/android/add", mhandler, 0, map);
 				}
 			}).start();
+			break;
+		case R.id.olduser:
+//			System.out.println("go to login");
+			Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+			startActivity(intent);
 			break;
 		}
 	}

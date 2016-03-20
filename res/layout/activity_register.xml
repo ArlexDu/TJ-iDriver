@@ -14,7 +14,7 @@
    <LinearLayout
         android:id="@+id/loginPanel"
         android:layout_width="400dp"
-        android:layout_height="300dp"
+        android:layout_height="310dp"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:orientation="vertical"
@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="10dp"
-            android:text="Please login" />
+            android:text="Please register first" />
 
         <EditText
             android:id="@+id/accountEt"
@@ -73,9 +73,20 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="18dp"
-            android:text="登录" 
+            android:text="注册" 
             android:onClick="onClick"
             android:background="@drawable/background_button_div"/>
+        <TextView
+            android:id="@+id/olduser"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="15dp"
+            android:gravity="right"
+            android:layout_marginRight="5dp"
+            android:onClick="onClick"
+            android:clickable="true"
+            android:text="@string/olduser"/>
     </LinearLayout>
 
    <ProgressBar

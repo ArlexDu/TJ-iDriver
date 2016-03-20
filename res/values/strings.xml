@@ -7,5 +7,7 @@
     <string name="title_activity_camera_detect">CameraDetect</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="title_activity_people_analyze">PeopleAnalyze</string>
+    <string name="title_activity_show_chart">ShowChart</string>
+    <string name="olduser"><u>have a account ?</u></string>
 
 </resources>
