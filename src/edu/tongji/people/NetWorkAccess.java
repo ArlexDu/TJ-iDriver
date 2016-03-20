@@ -15,7 +15,7 @@ import android.os.Message;
 import android.util.Log;
 import edu.tongji.people.MyApplication;;
 public class NetWorkAccess {
-    public static String base_url = "http://10.60.42.70:3000";
+    public static String base_url = "http://192.168.1.107:5555";
 	
 	public void ChangeInfo(final String uri,final Handler handler,final int what,final Map<String, String> map){	
 		String url = base_url+uri;

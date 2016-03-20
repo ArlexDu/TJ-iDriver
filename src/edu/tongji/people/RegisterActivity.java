@@ -4,9 +4,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.text.Html;
 import android.view.View;
 import android.view.Window;
@@ -21,7 +25,7 @@ public class RegisterActivity extends Activity {
 	private Button register;
 	private NetWorkAccess access;
 	private ProgressBar bar;
-
+    private Context context;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -33,6 +37,7 @@ public class RegisterActivity extends Activity {
 		register = (Button) findViewById(R.id.subBtn);
 		bar = (ProgressBar) findViewById(R.id.progressBar1);
 		access = new NetWorkAccess();
+		context = RegisterActivity.this;
 	}
 
 	public void onClick(View v) {
@@ -46,15 +51,17 @@ public class RegisterActivity extends Activity {
 					Map<String, String> map = new HashMap<String, String>();
 					map.put("uname", uname);
 					map.put("upassword", pw);
-					access.ChangeInfo("/android/add", mhandler, 0, map);
+					access.ChangeInfo("/android.php", mhandler, 0, map);
 				}
 			}).start();
 			break;
 		case R.id.olduser:
 //			System.out.println("go to login");
-			Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+			Intent intent = new Intent(context, LoginActivity.class);
 			startActivity(intent);
+			RegisterActivity.this.finish();
 			break;
+			
 		}
 	}
 
@@ -63,7 +70,14 @@ public class RegisterActivity extends Activity {
 			switch (msg.what) {
 			case 0:
 				bar.setVisibility(View.INVISIBLE);
-				System.out.println(msg.obj);
+//				System.out.println(msg.obj);
+				SharedPreferences preferences  = PreferenceManager.getDefaultSharedPreferences(context);
+				Editor editor = preferences.edit();
+				editor.putString("userid", msg.obj.toString());
+				editor.commit();
+				Intent intent = new Intent(context, PeopleAnalyze.class);
+				startActivity(intent);
+				RegisterActivity.this.finish();
 				break;
 			default:
 				break;

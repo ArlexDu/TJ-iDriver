@@ -4,8 +4,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -43,7 +47,7 @@ public class LoginActivity extends Activity {
 					Map<String, String> map = new HashMap<String, String>();
 					map.put("uname", uname);
 					map.put("upassword", pw);
-					access.ChangeInfo("", mhandler, 0, map);
+					access.ChangeInfo("/andlogin.php", mhandler, 0, map);
 				}
 			}).start();
 			break;
@@ -55,7 +59,14 @@ public class LoginActivity extends Activity {
 			switch (msg.what) {
 			case 0:
 				bar.setVisibility(View.INVISIBLE);
-				System.out.println(msg.obj);
+//				System.out.println(msg.obj);
+				SharedPreferences preferences  = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
+				Editor editor = preferences.edit();
+				editor.putString("userid", msg.obj.toString());
+				editor.commit();
+				Intent intent = new Intent(LoginActivity.this, PeopleAnalyze.class);
+				startActivity(intent);
+				LoginActivity.this.finish();
 				break;
 			default:
 				break;

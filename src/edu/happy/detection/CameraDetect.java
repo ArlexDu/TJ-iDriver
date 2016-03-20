@@ -26,6 +26,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -39,6 +40,7 @@ import java.util.TimerTask;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -97,8 +99,23 @@ public class CameraDetect extends Activity implements CvCameraViewListener2{
     private double mCurrentY;
     private double mCurrentZ;
     
+	private double v1;
+	private double v2;
+	private double v3;
 	
-    //
+	private double s1;
+	private double s2;	
+	private double s3;
+	
+	private double t1;
+	private double t2;
+	private double t3;
+	private int count = 0;
+	
+	private double totalA;
+	private double totalB;
+	private double totalC;
+	private double totalD;
 	
 	//opencv 摄像头的view
 	private MyCamera camera;
@@ -125,6 +142,7 @@ public class CameraDetect extends Activity implements CvCameraViewListener2{
 	private DistanceTracker tracker;
 	
 	private TextView showdistance;
+	
 	
 	//提示条
 	private HProgress progress;
@@ -174,6 +192,8 @@ public class CameraDetect extends Activity implements CvCameraViewListener2{
 	};
 	
 	Handler myHandler = new Handler(){
+
+
 		public void handleMessage(android.os.Message msg) {
 			switch (msg.what) {
 			case 1:
@@ -181,7 +201,65 @@ public class CameraDetect extends Activity implements CvCameraViewListener2{
 				break;
 
 			default:
-				showdistance.setText(msg.obj+"米");
+//				showdistance.setText(msg.obj+"米");
+				if(count == 0){
+					v1 = mSpeed;
+					s1 = Integer.valueOf(msg.obj.toString());
+					t1 = System.currentTimeMillis();
+				}else if(count == 1){
+					v2 = mSpeed;
+					s2 = Integer.valueOf(msg.obj.toString());
+					t2 = System.currentTimeMillis();
+				}
+				else  if(count == 2)
+				{
+					v3 = mSpeed;
+					s3 = Integer.valueOf(msg.obj.toString());
+					t3 = System.currentTimeMillis();
+					
+					totalA = (-1) * guanhuacount(v1, v2, v3, s1, s2, s3, t1, t2, t3);
+				}
+				else{
+					
+					v1 = v2;
+					s1 = s2;
+					t1 = t2;
+					
+					v2 = v3;
+					s2 = s3;
+					t2 = t3;
+					
+					v3 = mSpeed;
+					s3 = Integer.valueOf(msg.obj.toString());
+					t3 = System.currentTimeMillis();
+					
+					totalA = (-1) * guanhuacount(v1, v2, v3, s1, s2, s3, t1, t2, t3);
+					totalB = (s3 - s2)/(t3 -t2)*1.2 + 0.5 * totalA * 1.44;
+					double aerfa =  Math.max(mCurrentZ,totalB);
+					totalC =  (v3 * v3 / aerfa - (v3 - (s3 - s2)/(t3 -t2))/aerfa)*0.5 +v3 *1.2 +5;
+					if(totalC == totalB){
+						totalD = 1000000000;
+					}
+					else{
+					totalD = (s3 - totalB)/(totalC -totalB);
+					}
+					Log.i("BBB", "mm"+totalD);
+					float result = (float) (2 - Math.max(2,totalD));
+					progress.setCurrentCount(result);
+				}
+				
+//				lastTime = System.currentTimeMillis();
+//                setDistances(Integer.valueOf(msg.obj.toString()));	
+                
+				SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(CameraDetect.this);
+				String userid = sharedPreferences.getString("userid", "-100");
+				if(!userid.equals("-100")){
+					// TODO Auto-generated method stub
+					String url = "http://192.168.1.107:5555/andinfor.php";
+					new HttpThreadRegist(url, mLatitude, mLongtitude, mCurrentX, mCurrentY, mCurrentZ).start();	
+						//msg.obj,userid
+				}
+				count++;
 				break;
 			}
 		}
@@ -218,6 +296,8 @@ public class CameraDetect extends Activity implements CvCameraViewListener2{
 		camera.setCvCameraViewListener(this);
 		showdistance = (TextView)findViewById(R.id.distance);
 		progress = (HProgress) findViewById(R.id.notice);
+		progress.setMaxCount(2);
+		progress.setCurrentCount(0.2f);
 //		Log.i(TAG, "create");
 		//TIAN
 		initLocation();
@@ -313,7 +393,7 @@ public class CameraDetect extends Activity implements CvCameraViewListener2{
 			if(!mDetection.empty()){
 				Log.i(TAG, "get result");
 				try{
-					sleep(30);
+					sleep(50);
 				}catch(Exception e){
 					e.printStackTrace();
 				}
@@ -385,9 +465,7 @@ public class CameraDetect extends Activity implements CvCameraViewListener2{
 				mCurrentX = x;
 				mCurrentY = y;
 				mCurrentZ = z;
-	            Log.i(TAGA,"\n x: "+ mCurrentX);  
-	            Log.i(TAGA,"\n y: "+ mCurrentY);  
-	            Log.i(TAGA,"\n z: "+ mCurrentZ);  
+	           
 			}
 		});
         
@@ -435,20 +513,23 @@ public class CameraDetect extends Activity implements CvCameraViewListener2{
 				Toast.makeText(context,mCurrentX+","+mCurrentY, Toast.LENGTH_SHORT).show();
 				
 				
-				
+			////////	要删除的
 			    TimerTask task = new TimerTask() {
 					
 					@Override
 					public void run() {
 						// TODO Auto-generated method stub
-						String url = "http://192.168.1.105:5555/andinfor.php";
+						String url = "http://192.168.1.107:5555/andinfor.php";
 						new HttpThreadRegist(url, mLatitude, mLongtitude, mCurrentX, mCurrentY, mCurrentZ).start();	
-					 
+						
+						
 					}
 				};
 				Timer timer = new Timer(true);
-				timer.schedule(task,3000, 2000);	     
-			
+				timer.schedule(task,3000, 1000);	
+				
+				
+			////////
 			  
 			}
 			
@@ -456,10 +537,43 @@ public class CameraDetect extends Activity implements CvCameraViewListener2{
     	
     }
 	
+	private float[] speeds = new float[4];
+	private float[] times = new float[2];
+	private int[] distances = new int[3];
+	private long lastTime = 0;   
+    private int currentSpeed = 0;
+    private int currentTime = 0;
+    private int currentDistance = 0;
+    
+	private void setSpeeds(float speed){
+//		if(currentSpeed)
+	}
+	
+	//设置两次时间间隔
+	private void setTimes(){
+		times[currentTime] = System.currentTimeMillis() - lastTime;
+		currentTime++;
+		if(currentTime>1){
+			currentTime = 0;
+		}
+	}
+	
+	private void setDistances(int distance){
+		 
+	}
 	
 	
-	
-	
+	private double guanhuacount(double v1,double v2,double v3,double s1,double s2,double s3,double t1,double t2,double t3){
+		double currentA = 0;
+		
+		currentA = (v3 -v2)/2 + (s1 - s2)/(t2 - t1) - (s3 - s2)/(t3 - t2);
+		currentA = currentA/(t3- t2);
+		
+		
+		return currentA;
+		
+			
+	}
 	
 }
 

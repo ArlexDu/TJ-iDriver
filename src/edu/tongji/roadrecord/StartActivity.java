@@ -66,8 +66,8 @@ public class StartActivity extends Activity implements OnGestureListener {
 		SharedPreferences.Editor editor = preferences.edit();
 		//第一次登陆  
 		if(first == 0){
-			int userid = -100;
-			editor.putInt("userid", userid);
+			String userid = "-100";
+			editor.putString("userid", userid);
 		}
 		first++;
 		editor.putInt("open", first);
@@ -96,8 +96,8 @@ public class StartActivity extends Activity implements OnGestureListener {
 			break;	
 		case R.id.people:
 			SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-			int uid = preferences.getInt("userid", -100);
-			if(uid == -100){//需要登录或者注册
+			String uid = preferences.getString("userid", "-100");
+			if(uid.equals("-100")){//需要登录或者注册
 				intent = new Intent(StartActivity.this,RegisterActivity.class);
 			}else{
 				intent = new Intent(StartActivity.this,PeopleAnalyze.class);
@@ -261,7 +261,7 @@ public class StartActivity extends Activity implements OnGestureListener {
 			displayRatio_selelct(currentPage);
 			displayRatio_normal(currentPage - 1);
 		}
-		Log.e("currentPage", currentPage + "");		
+//		Log.e("currentPage", currentPage + "");		
 		
 	}
 	private void showPreviousView(){
@@ -278,7 +278,7 @@ public class StartActivity extends Activity implements OnGestureListener {
 			displayRatio_selelct(currentPage);
 			displayRatio_normal(currentPage + 1);
 		}
-		Log.e("currentPage", currentPage + "");		
+//		Log.e("currentPage", currentPage + "");		
 	}
 	private void displayRatio_selelct(int id){
 		int[] ratioId = { R.id.home_ratio_img_03, R.id.home_ratio_img_02, R.id.home_ratio_img_01};

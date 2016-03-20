@@ -26,9 +26,10 @@ public class PinChart extends View {
 	int valueX;
 	int valueY;
 
-	public static float[] humidity = { 110, 60, 50, 50, 40, 30, 10, 10 };
-	private String str[] = { "24%", "19%", "21%", "18%", "3%", "3%", "4%", "6%" };
-    private String name[] = {"0km~40km","40km~50km","50km~60km","60km~70km","70km~80km","80km~90km","90km~100km","100km~"};
+	public static float[] humidity = new float[8];
+	private float[] times = new float[8]; 
+	private String str[] = new String[8];
+    private String name[] = {"0~40km/h","40~50km/h","50~60km/h","60~70km/h","70~80km/h","80~90km/h","90~100km/h","100km/h~"};
 	private final String color[] = { "#2cbae7", "#ffa500", "#ff5b3b", "#9fa0a4", "#6a71e5", "#f83f5d", "#64a300",
 			"#64ef85" };
 
@@ -42,7 +43,17 @@ public class PinChart extends View {
 		initView();
 	}
 
+	public PinChart(Context context, float[] times) {
+		super(context);
+		this.times = times;
+		initView();
+	}
+
 	private void initView() {
+		for(int i=0;i<8;i++){
+			str[i] = times[i]+"%";
+			humidity[i] = (float) (3.6*times[i]);
+		}
 		ani = new mAnimation();
 		ani.setDuration(2000);
 	}
@@ -94,8 +105,7 @@ public class PinChart extends View {
 //				正常绘制，上下层绘制叠盖
 				mPaints[i].setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_OVER));
 				mPaints[i].setAntiAlias(true);
-				mPaints[i].setColor(Color.WHITE);
-				mPaints[i].getTextBounds(str[i], 0, str[i].length(), bounds);
+				mPaints[i].setColor(Color.BLACK);
 				mPaints[i].setTextSize(sp2px(15));
 				measureText(start + 180, humidity[i], cicleWidth / 2.5f, i);
 				canvas.drawText(str[i], valueX - mPaints[i].measureText(str[i]) / 2, valueY + bounds.height() / 2,
@@ -139,8 +149,8 @@ public class PinChart extends View {
 		float temp = start + (angle / 2);
 
 		if (temp < 90) {
-			valueX = (int) (centerX - Math.abs(radius * Math.sin((temp / 180) * Math.PI)));
-			valueY = (int) (centerY - Math.abs(radius * Math.cos((temp / 180) * Math.PI)));
+			valueX = (int) (centerX - Math.abs(radius * Math.cos((temp / 180) * Math.PI)));
+			valueY = (int) (centerY - Math.abs(radius * Math.sin((temp / 180) * Math.PI)));
 		} else if (temp > 90 && temp < 180) {
 			temp = 180 - temp;
 			valueX = centerX + (int) Math.abs((radius * Math.cos((temp / 180) * Math.PI)));
@@ -154,6 +164,8 @@ public class PinChart extends View {
 			valueX = centerX - (int) Math.abs((radius * Math.cos((temp / 180) * Math.PI)));
 			valueY = centerY + (int) Math.abs((radius * Math.sin((temp / 180) * Math.PI)));
 		}
+		
+//		System.out.println(i+" : "+str[i]+" x: "+valueX+" y: "+valueY);
 
 	}
 

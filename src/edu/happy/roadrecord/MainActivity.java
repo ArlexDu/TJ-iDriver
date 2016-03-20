@@ -262,6 +262,9 @@ public class MainActivity extends Activity {
 		    //更新经纬度
 			mLatitude = location.getLatitude();
 			mLongtitude = location.getLongitude();			
+			
+			 Log.i(TAG,"\n x: "+ mLatitude);  
+	            Log.i(TAG,"\n y: "+ mLongtitude);  
 			 
 			
 			if(isFirstIn)
@@ -276,7 +279,7 @@ public class MainActivity extends Activity {
 				Toast.makeText(context,mCurrentX+","+mCurrentY, Toast.LENGTH_SHORT).show();
 				
 				
-				String url = "http://192.168.1.105:5555/andinfor.php";
+				String url = "http://192.168.1.107:5555/andinfor.php";
 		
 				new HttpThreadRegist(url, mLatitude, mLongtitude, mCurrentX, mCurrentY, mCurrentZ).start();
 			  
