@@ -243,8 +243,8 @@ public class CameraDetect extends Activity implements CvCameraViewListener2{
 					else{
 					totalD = (s3 - totalB)/(totalC -totalB);
 					}
+					float result = (float) (2 - Math.min(2,totalD));
 					Log.i("BBB", "mm"+totalD);
-					float result = (float) (2 - Math.max(2,totalD));
 					progress.setCurrentCount(result);
 				}
 				
