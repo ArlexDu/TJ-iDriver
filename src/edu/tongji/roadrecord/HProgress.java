@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.LinearGradient;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.RectF;
 import android.graphics.Shader;
 import android.util.AttributeSet;
@@ -22,8 +23,8 @@ public class HProgress extends View {
 	 private float currentCount;
 	 /**»­±Ê*/
 	 private Paint mPaint;
-	 private int mWidth,mHeight;
-
+	 private int mWidth,h_bar,mHeight;
+     private int trangle_width = 0;
 	 public HProgress(Context context, AttributeSet attrs,
 	   int defStyleAttr) {
 	  super(context, attrs, defStyleAttr);
@@ -39,24 +40,25 @@ public class HProgress extends View {
 	 }
 
 	 private void initView(Context context) {
-		 
+		 trangle_width = 50;
 	 }
 	 @Override
 	 protected void onDraw(Canvas canvas) {
 	  super.onDraw(canvas);
 	  mPaint = new Paint();
 	  mPaint.setAntiAlias(true);
-	  int round = mWidth/2;
-	  System.out.println("max="+maxCount + "  current="+currentCount);
+	  
+	  float round = (mWidth -trangle_width)/2;
+//	  System.out.println("max="+maxCount + "  current="+currentCount);
 	  mPaint.setColor(Color.rgb(71, 76, 80));
-	  RectF rectBg = new RectF(0, 0, mWidth, mHeight);
+	  RectF rectBg = new RectF(0+trangle_width, 0+trangle_width, mWidth, h_bar);
 	  canvas.drawRoundRect(rectBg, round, round, mPaint);
 	  mPaint.setColor(Color.BLACK);
-	  RectF rectBlackBg = new RectF(2, 2, mWidth-2, mHeight-2);
+	  RectF rectBlackBg = new RectF(2+trangle_width, 2+trangle_width, mWidth-2, h_bar-2);
 	  canvas.drawRoundRect(rectBlackBg, round, round, mPaint);
 
 	  float section = 1-currentCount/maxCount;
-	  RectF rectProgressBg = new RectF(3, (mHeight-3)*section,mWidth-3,mHeight-3);
+	  RectF rectProgressBg = new RectF(3+trangle_width, (h_bar-3)*section+trangle_width,mWidth-3,h_bar-3);
 	  if(section >= 2.0f/3.0f){//ÂÌÉ«
 	   if(section != 1.0f){
 	    mPaint.setColor(SECTION_COLORS[2]);
@@ -80,10 +82,16 @@ public class HProgress extends View {
 	    positions[2] = 1.0f;
 	   }
 	   positions[positions.length-1] = 1.0f;
-	   LinearGradient shader = new LinearGradient(3, (mHeight-3)*section,mWidth-3,mHeight-3, colors,positions, Shader.TileMode.MIRROR);
+	   LinearGradient shader = new LinearGradient(3+trangle_width, (h_bar-3)*section,mWidth-3,h_bar-3, colors,positions, Shader.TileMode.MIRROR);
 	   mPaint.setShader(shader);
 	  }
 	  canvas.drawRoundRect(rectProgressBg, round, round, mPaint);
+	  Path path = new Path();
+	  path.moveTo(0, (h_bar-3)*section);
+	  path.lineTo(trangle_width, (h_bar-3)*section+trangle_width);
+	  path.lineTo(0, 2*trangle_width+(h_bar-3)*section);
+	  path.close();
+	  canvas.drawPath(path, mPaint);
 	 }
 
 	 private int dipToPx(int dip) {
@@ -123,13 +131,14 @@ public class HProgress extends View {
 	  int widthSpecSize = MeasureSpec.getSize(widthMeasureSpec);
 	  int heightSpecMode = MeasureSpec.getMode(heightMeasureSpec);
 	  int heightSpecSize = MeasureSpec.getSize(heightMeasureSpec);
-	  if (widthSpecMode == MeasureSpec.EXACTLY || widthSpecMode == MeasureSpec.AT_MOST) {
+	  if (widthSpecMode == MeasureSpec.EXACTLY) {
 	   mWidth = widthSpecSize;
 	  } else {
-	   mWidth = 0;
+	   mWidth = dipToPx(40);
 	  }
-	  if (heightSpecMode == MeasureSpec.AT_MOST || heightSpecMode == MeasureSpec.UNSPECIFIED) {
-	   mHeight = dipToPx(15);
+	  if (heightSpecMode == MeasureSpec.EXACTLY) {
+	   mHeight = dipToPx(200);
+	   h_bar = dipToPx(180);
 	  } else {
 	   mHeight = heightSpecSize;
 	  }

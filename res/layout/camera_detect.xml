@@ -23,9 +23,9 @@
 
 	<edu.tongji.roadrecord.HProgress
 	    android:id="@+id/notice"
-	    android:layout_width="20dp"
-	    android:layout_height="200dp"
-	    android:layout_above="@+id/distance"
+	    android:layout_width="45dp"
+	    android:layout_height="wrap_content"
+	    android:layout_alignBottom="@+id/distance"
 	    android:layout_alignParentRight="true"
 	    android:layout_alignParentTop="true"
 	    android:layout_marginRight="20dp"
