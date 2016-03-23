@@ -284,7 +284,7 @@ int get_alfa_and_beta_X_Y(pack ans,int c,int r,int H){//c:³µµ×±ßwidth×ø±ê£¬r£º³µ
 		return -233;
 	int c0=cvGetSize(ans.img).width/2;
 	int r0=cvGetSize(ans.img).height/2;
-	double fc=500;///3.79*2.83;//  =ÉãÏñÍ·½¹¾à/ÏñËØ¿í¶È£»
+	double fc=1500;///3.79*2.83;//  =ÉãÏñÍ·½¹¾à/ÏñËØ¿í¶È£»
 	double alfa=atan((r0-rd)/fc);
 	double beta=atan((cd-c0)/fc*cos(alfa));
 	int Z=(c-c0)*sin(beta)-(r-r0)*sin(alfa)*cos(beta)+cos(alfa)*cos(beta)*fc;
@@ -299,11 +299,12 @@ int get_alfa_and_beta_X_Y(pack ans,int c,int r,int H){//c:³µµ×±ßwidth×ø±ê£¬r£º³µ
 
 JNIEXPORT jint JNICALL Java_edu_happy_detection_DistanceTracker_GetDistance
   (JNIEnv * env, jobject jo, jlong ptr, jint x, jint y){
-    Mat *ptrgray = (Mat *)ptr;
-//    Mat imageGray ;
-//    cvtColor ( * ptrRgb , imageGray , CV_RGBA2GRAY ) ;
-    IplImage img = *ptrgray;
+    Mat *ptrRgb = (Mat *)ptr;
+    IplImage rgb_img = *ptrRgb;
+    IplImage *image_gray = cvCreateImage(CvSize(cvGetSize(&rgb_img)),IPL_DEPTH_8U,1);
+    cvCvtColor ( &rgb_img , image_gray , CV_RGBA2GRAY ) ;
     IplImage *img_resize= cvCreateImage(size_of_img,IPL_DEPTH_8U,1);
+    cvResize(image_gray,img_resize);
     int white_aver=get_white(img_resize);
     pack ans;
     cvThreshold(img_resize,img_resize,white_aver,255,CV_THRESH_BINARY);

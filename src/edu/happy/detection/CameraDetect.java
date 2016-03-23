@@ -201,7 +201,7 @@ public class CameraDetect extends Activity implements CvCameraViewListener2{
 				break;
 
 			default:
-//				showdistance.setText(msg.obj+"米");
+				showdistance.setText(msg.obj+"米");
 				if(count == 0){
 					v1 = mSpeed;
 					s1 = Integer.valueOf(msg.obj.toString());
@@ -361,7 +361,7 @@ public class CameraDetect extends Activity implements CvCameraViewListener2{
 					new Point(gray.cols()/4+rect.x,rect.y+gray.rows()/4),
 					new Point(gray.cols()/4+rect.x+rect.width,rect.y+rect.height+gray.rows()/4),
 					new Scalar(0,255,0));
-			int length = tracker.GetDistance(mrgb.getNativeObjAddr(),rect.x+rect.width/2,rect.height);
+			int length = tracker.GetDistance(mrgb.getNativeObjAddr(),gray.cols()/4+rect.x+rect.width/2,rect.y+rect.height+gray.rows()/4);
 //			System.out.println("length is "+ length);
 //			if(length>0){
 				Message m = new Message();
@@ -496,7 +496,7 @@ public class CameraDetect extends Activity implements CvCameraViewListener2{
 		    //更新经纬度
 			mLatitude = location.getLatitude();
 			mLongtitude = location.getLongitude();			
-			mSpeed = location.getSpeed();
+			mSpeed = 14;//location.getSpeed();
 			
             Log.i(TAGG,"\n LAT: "+ mLatitude);  
             Log.i(TAGG,"\n LONG: "+ mLongtitude);  
