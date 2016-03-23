@@ -20,6 +20,7 @@ import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.objdetect.CascadeClassifier;
 
+import android.R.integer;
 import android.app.Activity;
 import android.hardware.Camera;
 import android.os.Bundle;
@@ -33,8 +34,11 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import edu.happy.roadrecord.R;
+import edu.tongji.people.NetWorkAccess;
 import edu.tongji.roadrecord.HProgress;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -91,6 +95,7 @@ public class CameraDetect extends Activity implements CvCameraViewListener2{
     private double mLongtitude;
     private double mSpeed;
     
+    private NetWorkAccess access;
     //自定义图标
 
     private MyOrientationListener myOrientationListener;
@@ -98,6 +103,8 @@ public class CameraDetect extends Activity implements CvCameraViewListener2{
     private double mCurrentX;
     private double mCurrentY;
     private double mCurrentZ;
+    private int mdistance;
+    private String address;
     
 	private double v1;
 	private double v2;
@@ -196,11 +203,14 @@ public class CameraDetect extends Activity implements CvCameraViewListener2{
 
 		public void handleMessage(android.os.Message msg) {
 			switch (msg.what) {
+			case 0:
+				System.out.println("传送成功:" +msg.obj);
+				break;
 			case 1:
 				getnew = true;
 				break;
-
 			default:
+				mdistance =Integer.valueOf( msg.obj.toString());
 				showdistance.setText(msg.obj+"米");
 				if(count == 0){
 					v1 = mSpeed;
@@ -243,7 +253,7 @@ public class CameraDetect extends Activity implements CvCameraViewListener2{
 					else{
 					totalD = (s3 - totalB)/(totalC -totalB);
 					}
-					float result = (float) (2 - Math.min(2,totalD));
+					float result = (float) (1 - Math.min(1,totalD));
 					Log.i("BBB", "mm"+totalD);
 					progress.setCurrentCount(result);
 				}
@@ -252,12 +262,26 @@ public class CameraDetect extends Activity implements CvCameraViewListener2{
 //                setDistances(Integer.valueOf(msg.obj.toString()));	
                 
 				SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(CameraDetect.this);
-				String userid = sharedPreferences.getString("userid", "-100");
+				final String userid = sharedPreferences.getString("userid", "-100");
 				if(!userid.equals("-100")){
 					// TODO Auto-generated method stub
-					String url = "http://192.168.1.107:5555/andinfor.php";
-					new HttpThreadRegist(url, mLatitude, mLongtitude, mCurrentX, mCurrentY, mCurrentZ).start();	
-						//msg.obj,userid
+					String url = "/andinfor.php";
+					new Thread(new Runnable() {
+						public void run() {
+							Map<String, String> map = new HashMap<String, String>();
+							map.put("userid", userid);
+							map.put("latitude", String.valueOf(mLatitude));
+							map.put("longtitude", String.valueOf(mLongtitude));
+							map.put("xa",String.valueOf(mCurrentX));
+							map.put("ya",String.valueOf(mCurrentY));
+							map.put("za",String.valueOf(mCurrentZ));
+							map.put("mspeed", String.valueOf(mSpeed*3.6));
+							map.put("distance", String.valueOf(mdistance));
+							map.put("andress",String.valueOf(address));
+							map.put("w",String.valueOf(totalD));
+							access.ChangeInfo("/andinfor.php", myHandler, 0, map);
+						}
+					}).start();
 				}
 				count++;
 				break;
@@ -296,8 +320,9 @@ public class CameraDetect extends Activity implements CvCameraViewListener2{
 		camera.setCvCameraViewListener(this);
 		showdistance = (TextView)findViewById(R.id.distance);
 		progress = (HProgress) findViewById(R.id.notice);
-		progress.setMaxCount(2);
+		progress.setMaxCount(1);
 		progress.setCurrentCount(0.2f);
+		access = new NetWorkAccess();
 //		Log.i(TAG, "create");
 		//TIAN
 		initLocation();
@@ -507,7 +532,7 @@ public class CameraDetect extends Activity implements CvCameraViewListener2{
 			{
 			
 				isFirstIn = false;
-				
+				address = location.getAddrStr();
 				Toast.makeText(context,location.getAddrStr(), Toast.LENGTH_SHORT).show();
 				Toast.makeText(context,mLatitude+","+mLongtitude, Toast.LENGTH_SHORT).show();
 				Toast.makeText(context,mCurrentX+","+mCurrentY, Toast.LENGTH_SHORT).show();

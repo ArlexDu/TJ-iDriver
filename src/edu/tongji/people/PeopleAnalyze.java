@@ -1,6 +1,7 @@
 package edu.tongji.people;
 
 
+import java.io.Console;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,6 +11,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Window;
 import android.widget.ProgressBar;
 
@@ -28,16 +30,13 @@ public class PeopleAnalyze extends Activity {
 		new Thread(new Runnable() {
 			public void run() {
                  try {
-					Thread.sleep(3000);
 					SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(PeopleAnalyze.this);
 					String userid = preferences.getString("userid", "-100");
+				//	System.out.println("user id is "+userid);
 					Map<String, String> map = new HashMap<String, String>();
 					map.put("userid", userid);
-					access.ChangeInfo("/andlogin.php", mHandler, 0, map);
-					Message message = new Message();
-					message.what = 0;
-					mHandler.sendMessage(message);
-				} catch (InterruptedException e) {
+					access.ChangeInfo("/andRequest.php", mHandler, 0, map);
+				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
@@ -46,10 +45,19 @@ public class PeopleAnalyze extends Activity {
 	}
     Handler mHandler = new Handler(){
     	public void handleMessage(android.os.Message msg) {
-    		float[] times ={12.5f,12.5f,12.5f,12.5f,12.5f,12.5f,12.5f,12.5f}; 
-    		chart = new PinChart(PeopleAnalyze.this,times);
-    		setContentView(chart);
-    		chart.start();
+    		if(msg.what == 0){
+    			Log.i("result : ", (String) msg.obj);
+    			float[] times = new float[8];
+    			String percentages = msg.obj.toString();
+    		        String[] perArray = percentages.split("/");
+    		        for (int i = 0; i < perArray.length; i++) {
+    		            times[i] = Float.valueOf(perArray[i]);
+    		            times[i] = (float) Math.round(times[i]*100)/100;
+    		        } 
+        		chart = new PinChart(PeopleAnalyze.this,times);
+        		setContentView(chart);
+        		chart.start();
+    		}
     	};
     };
 

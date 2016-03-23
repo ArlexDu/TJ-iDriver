@@ -101,7 +101,7 @@ public class PinChart extends View {
 //			绘制扇形区域
 			canvas.drawArc(mBigOval, start, mSweep[i], true, mPaints[i]);
 //			加入文字描述
-//			if (humidity[i] > 45) {
+			if (!str[i].equals("0.0%")) {
 //				正常绘制，上下层绘制叠盖
 				mPaints[i].setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_OVER));
 				mPaints[i].setAntiAlias(true);
@@ -110,7 +110,7 @@ public class PinChart extends View {
 				measureText(start + 180, humidity[i], cicleWidth / 2.5f, i);
 				canvas.drawText(str[i], valueX - mPaints[i].measureText(str[i]) / 2, valueY + bounds.height() / 2,
 						mPaints[i]);
-//			}
+			}
 			start += humidity[i];
 			int j = 1;
 			int k;
