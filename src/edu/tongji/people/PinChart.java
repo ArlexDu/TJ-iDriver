@@ -26,12 +26,11 @@ public class PinChart extends View {
 	int valueX;
 	int valueY;
 
-	public static float[] humidity = new float[8];
-	private float[] times = new float[8]; 
-	private String str[] = new String[8];
-    private String name[] = {"0~40km/h","40~50km/h","50~60km/h","60~70km/h","70~80km/h","80~90km/h","90~100km/h","100km/h~"};
-	private final String color[] = { "#2cbae7", "#ffa500", "#ff5b3b", "#9fa0a4", "#6a71e5", "#f83f5d", "#64a300",
-			"#64ef85" };
+	public static float[] humidity = new float[6];
+	private float[] times = new float[6]; 
+	private String str[] = new String[6];
+    private String name[] = {"很不安全","不安全","欠安全","较安全","安全","非常安全"};
+	private final String color[] = { "#ff0000","#ff6600","#ffb400","#fcff00","#72ff00", "#00a2ff"};
 
 	public PinChart(Context context) {
 		super(context);
@@ -50,7 +49,7 @@ public class PinChart extends View {
 	}
 
 	private void initView() {
-		for(int i=0;i<8;i++){
+		for(int i=0;i<6;i++){
 			str[i] = times[i]+"%";
 			humidity[i] = (float) (3.6*times[i]);
 		}
@@ -76,7 +75,7 @@ public class PinChart extends View {
 //		底部的长方形的说明高度是30px，加上底部
 		centerY = (getHeight()-dp2px(60))>(getWidth()-dp2px(60))?((getHeight()-dp2px(60))/2):(getWidth() / 2+dp2px(30));
 //		提示的长方形块
-		preWidth = (getWidth() - dp2px(40)) / 4;
+		preWidth = (getWidth() - dp2px(40)) / 3;
 		int half = getWidth() / 2;
 		int circle_radius = cicleWidth/2;
 
@@ -101,7 +100,7 @@ public class PinChart extends View {
 //			绘制扇形区域
 			canvas.drawArc(mBigOval, start, mSweep[i], true, mPaints[i]);
 //			加入文字描述
-			if (!str[i].equals("0.0%")) {
+			if (humidity[i]>5) {
 //				正常绘制，上下层绘制叠盖
 				mPaints[i].setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_OVER));
 				mPaints[i].setAntiAlias(true);
@@ -114,26 +113,26 @@ public class PinChart extends View {
 			start += humidity[i];
 			int j = 1;
 			int k;
-			if (i < 4) {
+			if (i < 3) {
 				j = 0;
 				k = i;
 			} else {
 				j = 1;
-				k = i - 4;
+				k = i - 3;
 			}
 			mPaints[i] = new Paint();
 			mPaints[i].setAntiAlias(true);
 			mPaints[i].setStyle(Paint.Style.FILL);
 			mPaints[i].setColor(Color.parseColor(color[i]));
-			canvas.drawRect(new RectF(dp2px(20) + preWidth * k, centerY+circle_radius+ dp2px(j * 30 + 20),
-					dp2px(20) + preWidth * (k + 1), centerY+circle_radius+ dp2px(50 + j * 30)), mPaints[i]);
+			canvas.drawRect(new RectF(dp2px(20) + preWidth * k, centerY+circle_radius+ dp2px(j * 30 + 30),
+					dp2px(20) + preWidth * (k + 1), centerY+circle_radius+ dp2px(60 + j * 30)), mPaints[i]);
 			mPaints[i].setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_OVER));
 			mPaints[i].setAntiAlias(true);
 			mPaints[i].setColor(Color.WHITE);
 			mPaints[i].getTextBounds(name[i], 0, name[i].length(), bounds);
-			mPaints[i].setTextSize(sp2px(12));
+			mPaints[i].setTextSize(sp2px(16));
 			canvas.drawText(name[i], dp2px(20) + preWidth * k + preWidth / 2 - mPaints[i].measureText(name[i]) / 2,
-					centerY+circle_radius+ dp2px(j * 30 + 20) + (dp2px(30) / 2 + bounds.height() / 2), mPaints[i]);
+					centerY+circle_radius+ dp2px(j * 30 + 30) + (dp2px(30) / 2 + bounds.height() / 2), mPaints[i]);
 		}
 	}
 
