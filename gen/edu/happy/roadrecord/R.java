@@ -66,16 +66,17 @@ containing a value of this type.
         public static final int home_img_ratio=0x7f020006;
         public static final int home_img_ratio_selected=0x7f020007;
         public static final int ic_launcher=0x7f020008;
-        public static final int input_over=0x7f020009;
-        public static final int login_input=0x7f02000a;
-        public static final int map_icon=0x7f02000b;
-        public static final int map_show=0x7f02000c;
-        public static final int navi_map_gps_locked=0x7f02000d;
-        public static final int people_icon=0x7f02000e;
-        public static final int people_show=0x7f02000f;
-        public static final int pointer=0x7f020010;
-        public static final int qq_edit_login=0x7f020011;
-        public static final int ratio_img_style=0x7f020012;
+        public static final int idriver=0x7f020009;
+        public static final int input_over=0x7f02000a;
+        public static final int login_input=0x7f02000b;
+        public static final int map_icon=0x7f02000c;
+        public static final int map_show=0x7f02000d;
+        public static final int navi_map_gps_locked=0x7f02000e;
+        public static final int people_icon=0x7f02000f;
+        public static final int people_show=0x7f020010;
+        public static final int pointer=0x7f020011;
+        public static final int qq_edit_login=0x7f020012;
+        public static final int ratio_img_style=0x7f020013;
     }
     public static final class id {
         public static final int accountEt=0x7f090007;
