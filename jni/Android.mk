@@ -5,7 +5,11 @@ include $(CLEAR_VARS)
 OPENCV_CAMERA_MODULES:=off
 OPENCV_INSTALL_MODULES:=on
 OPENCV_LIB_TYPE:=SHARED
+ifeq ("$(wildcard $(OPENCV_MK_PATH))","")
 include D:/Eclipse/OpenCV-android-sdk/sdk/native/jni/OpenCV.mk
+else  
+include $(OPENCV_MK_PATH)  
+endif
 
 LOCAL_SRC_FILES  := tracker.cpp
 LOCAL_C_INCLUDES += $(LOCAL_PATH)

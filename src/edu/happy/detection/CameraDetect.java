@@ -181,12 +181,12 @@ public class CameraDetect extends Activity implements CvCameraViewListener2{
 				//构造分类器
 				String xmlfilePath = null;
 				xmlfilePath = Environment.getExternalStorageDirectory()+"/car.xml";
-				Log.i(TAG, "file path is " +xmlfilePath);
+	//			Log.i(TAG, "file path is " +xmlfilePath);
 				mDetector = new CascadeClassifier(xmlfilePath);
 				mDetection = new MatOfRect();
 				camera.enableView();
 				tracker  = new DistanceTracker();
-				Log.i(TAG, "load successful");
+	//			Log.i(TAG, "load successful");
 				}catch (Exception e) {
 					// TODO: handle exception
 					e.printStackTrace();
@@ -258,7 +258,7 @@ public class CameraDetect extends Activity implements CvCameraViewListener2{
 					totalD = (s3 - totalB)/(totalC -totalB);
 					}
 					float result = (float) (1 - Math.min(1,totalD));
-					Log.i("BBB", "mm"+totalD);
+	//				Log.i("BBB", "mm"+totalD);
 					progress.setCurrentCount(result);
 				}
 				
@@ -267,6 +267,7 @@ public class CameraDetect extends Activity implements CvCameraViewListener2{
                 
 				SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(CameraDetect.this);
 				final String userid = sharedPreferences.getString("userid", "-100");
+//				System.out.println("user id is "+ userid);
 				if(!userid.equals("-100")){
 					// TODO Auto-generated method stub
 					String url = "/andinfor.php";
@@ -381,7 +382,7 @@ public class CameraDetect extends Activity implements CvCameraViewListener2{
 			}
 			num++;
 		}
-		Log.i(TAG, "max is "+max);
+//		Log.i(TAG, "max is "+max);
 //		显示最大的识别车辆
 		if(max != -1){
 			Rect rect = mDetection.toArray().clone()[max];
@@ -407,10 +408,8 @@ public class CameraDetect extends Activity implements CvCameraViewListener2{
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-//		Log.i(TAG, "resume");
 //		OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_2_4_11, this, mLoaderCallback);
 		mLoaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
-//		Log.i(TAG, "done");
 	}
 	class MyThread extends Thread{
 		@Override
@@ -421,7 +420,7 @@ public class CameraDetect extends Activity implements CvCameraViewListener2{
 			mDetector.detectMultiScale(roi, mDetection, 1.1, 2, 2, new Size(detectiveSize,detectiveSize),
 					new Size());
 			if(!mDetection.empty()){
-				Log.i(TAG, "get result");
+//				Log.i(TAG, "get result");
 				try{
 					sleep(50);
 				}catch(Exception e){
@@ -528,9 +527,9 @@ public class CameraDetect extends Activity implements CvCameraViewListener2{
 			mLongtitude = location.getLongitude();			
 			mSpeed = 14;//location.getSpeed();
 			
-            Log.i(TAGG,"\n LAT: "+ mLatitude);  
-            Log.i(TAGG,"\n LONG: "+ mLongtitude);  
-            Log.i(TAGG,"\n SPEED: "+ mSpeed);  
+   //         Log.i(TAGG,"\n LAT: "+ mLatitude);  
+   //         Log.i(TAGG,"\n LONG: "+ mLongtitude);  
+   //         Log.i(TAGG,"\n SPEED: "+ mSpeed);  
             
         
 			if(isFirstIn)
