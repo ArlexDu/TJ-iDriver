@@ -88,8 +88,7 @@ public class CameraDetect extends Activity implements CvCameraViewListener2{
     //定位相关
     private LocationClient mLocationClient;
     private MyLocationListener mLocationListener;
-    
-  
+     
     private boolean isFirstIn = true;
     private double mLatitude;
     private double mLongtitude;
@@ -153,8 +152,13 @@ public class CameraDetect extends Activity implements CvCameraViewListener2{
 	
 	//提示条
 	private HProgress progress;
-	static{
-		System.loadLibrary("tracker");
+	static {
+		if(!OpenCVLoader.initDebug()){
+			System.out.println("opencv 初始化失败！");
+		}else{
+			System.loadLibrary("opencv_java");
+			System.loadLibrary("tracker");
+		}
 	}
 	//链接opencv
 	private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
@@ -404,7 +408,8 @@ public class CameraDetect extends Activity implements CvCameraViewListener2{
 		// TODO Auto-generated method stub
 		super.onResume();
 //		Log.i(TAG, "resume");
-		OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_2_4_11, this, mLoaderCallback);
+//		OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_2_4_11, this, mLoaderCallback);
+		mLoaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
 //		Log.i(TAG, "done");
 	}
 	class MyThread extends Thread{
