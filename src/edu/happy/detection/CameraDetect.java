@@ -540,25 +540,6 @@ public class CameraDetect extends Activity implements CvCameraViewListener2{
 				Toast.makeText(context,location.getAddrStr(), Toast.LENGTH_SHORT).show();
 				Toast.makeText(context,mLatitude+","+mLongtitude, Toast.LENGTH_SHORT).show();
 				Toast.makeText(context,mCurrentX+","+mCurrentY, Toast.LENGTH_SHORT).show();
-				
-				
-			////////	ÒªÉ¾³ýµÄ
-			    TimerTask task = new TimerTask() {
-					
-					@Override
-					public void run() {
-						// TODO Auto-generated method stub
-						String url = "http://192.168.1.107:5555/andinfor.php";
-						new HttpThreadRegist(url, mLatitude, mLongtitude, mCurrentX, mCurrentY, mCurrentZ).start();	
-						
-						
-					}
-				};
-				Timer timer = new Timer(true);
-				timer.schedule(task,3000, 1000);	
-				
-				
-			////////
 			  
 			}
 			

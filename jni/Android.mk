@@ -16,7 +16,7 @@ LOCAL_SRC_FILES  := tracker.cpp
 LOCAL_C_INCLUDES += $(LOCAL_PATH)
 LOCAL_LDLIBS     += -llog -ldl
 LOCAL_MODULE     := tracker
-#LOCAL_JNI_SHARED_LIBRARIES := libtracker.so
+LOCAL_JNI_SHARED_LIBRARIES := libtracker.so
 include $(BUILD_SHARED_LIBRARY)
 
 include $(CLEAR_VARS)
