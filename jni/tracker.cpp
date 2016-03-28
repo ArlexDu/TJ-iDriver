@@ -319,7 +319,7 @@ JNIEXPORT jint JNICALL Java_edu_happy_detection_DistanceTracker_GetDistance
 	}
 	ans=findlines(img_resize,1);
 	cvCopy(ans.img,img_resize,NULL);
-	int z=get_alfa_and_beta_X_Y(ans,x,y,1);
+	int z=get_alfa_and_beta_X_Y(ans,x,y,1.3);
 	cvReleaseImage(&img_resize);
 	return z;
 }

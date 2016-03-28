@@ -46,14 +46,17 @@ public class PeopleAnalyze extends Activity {
     Handler mHandler = new Handler(){
     	public void handleMessage(android.os.Message msg) {
     		if(msg.what == 0){
-    			Log.i("result : ", (String) msg.obj);
-    			float[] times = new float[8];
+    	//		Log.i("result : ", (String) msg.obj);
+    			float[] times = new float[6];
     			String percentages = msg.obj.toString();
     		        String[] perArray = percentages.split("/");
     		        for (int i = 0; i < perArray.length; i++) {
     		            times[i] = Float.valueOf(perArray[i]);
     		            times[i] = (float) Math.round(times[i]*100)/100;
     		        } 
+    		    if(times[0]==0&&times[1]==0&&times[2]==0&&times[3]==0&&times[4]==0&&times[5]==0){
+    		    	times[5]=100;
+    		    }
         		chart = new PinChart(PeopleAnalyze.this,times);
         		setContentView(chart);
         		chart.start();

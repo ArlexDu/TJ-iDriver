@@ -65,14 +65,17 @@
 
         <activity
             android:name="edu.tongji.roadrecord.Next"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="edu.tongji.roadrecord.StartActivity" >
+        <activity android:name="edu.tongji.roadrecord.StartActivity"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="edu.happy.detection.CameraDetect"
@@ -80,19 +83,24 @@
             android:label="@string/title_activity_camera_detect"
             android:screenOrientation="landscape" >
         </activity>
-        <activity android:name=".MainActivity" >
+        <activity android:name=".MainActivity" 
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name="edu.tongji.people.RegisterActivity"
-            android:label="@string/title_activity_login" >
+            android:label="@string/title_activity_login" 
+            android:screenOrientation="portrait">
         </activity>
-        <activity android:name="edu.tongji.people.PeopleAnalyze" >
+        <activity android:name="edu.tongji.people.PeopleAnalyze"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".ShowChart"
-            android:label="@string/title_activity_show_chart" >
+            android:label="@string/title_activity_show_chart"
+            android:screenOrientation="portrait" >
         </activity>
-        <activity android:name="edu.tongji.people.LoginActivity"></activity>
+        <activity android:name="edu.tongji.people.LoginActivity"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

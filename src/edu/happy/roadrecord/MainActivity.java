@@ -18,6 +18,8 @@ import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import edu.happy.roadrecord.MyOrientationListener.OnOrientationListener;
+import edu.tongji.people.NetWorkAccess;
+
 import com.baidu.mapapi.SDKInitializer;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptor;
@@ -263,8 +265,8 @@ public class MainActivity extends Activity {
 			mLatitude = location.getLatitude();
 			mLongtitude = location.getLongitude();			
 			
-			 Log.i(TAG,"\n x: "+ mLatitude);  
-	            Log.i(TAG,"\n y: "+ mLongtitude);  
+	//		 Log.i(TAG,"\n x: "+ mLatitude);  
+	//            Log.i(TAG,"\n y: "+ mLongtitude);  
 			 
 			
 			if(isFirstIn)
@@ -279,9 +281,9 @@ public class MainActivity extends Activity {
 				Toast.makeText(context,mCurrentX+","+mCurrentY, Toast.LENGTH_SHORT).show();
 				
 				
-				String url = "http://192.168.1.107:5555/andinfor.php";
+			//	String url = NetWorkAccess.base_url+"/andinfor.php";
 		
-				new HttpThreadRegist(url, mLatitude, mLongtitude, mCurrentX, mCurrentY, mCurrentZ).start();
+			//	new HttpThreadRegist(url, mLatitude, mLongtitude, mCurrentX, mCurrentY, mCurrentZ).start();
 			  
 			}
 			
