@@ -525,7 +525,7 @@ public class CameraDetect extends Activity implements CvCameraViewListener2{
 		    //更新经纬度
 			mLatitude = location.getLatitude();
 			mLongtitude = location.getLongitude();			
-			mSpeed = 14;//location.getSpeed();
+			mSpeed = location.getSpeed();//14
 			
    //         Log.i(TAGG,"\n LAT: "+ mLatitude);  
    //         Log.i(TAGG,"\n LONG: "+ mLongtitude);  

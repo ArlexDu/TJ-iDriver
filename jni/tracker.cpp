@@ -277,17 +277,17 @@ pack  findlines(IplImage *img,int k){
 	return ans;
 }
 
-int get_alfa_and_beta_X_Y(pack ans,int c,int r,int H){//c:车底边width坐标，r：车底边height坐标 H:摄像头距离地面距离；
-	int cd=ans.center.x;//灭点width方向
-	int rd=ans.center.y; // 灭点height方向
+int get_alfa_and_beta_X_Y(pack ans,int c,int r,float H){//c:车底边width坐标，r：车底边height坐标 H:摄像头距离地面距离；
+	float cd=ans.center.x;//灭点width方向
+	float rd=ans.center.y; // 灭点height方向
 	if(cd==-233&&rd==-233)
 		return -233;
-	int c0=cvGetSize(ans.img).width/2;
-	int r0=cvGetSize(ans.img).height/2;
-	double fc=1500;///3.79*2.83;//  =摄像头焦距/像素宽度；
+	float c0=cvGetSize(ans.img).width/2;
+	float r0=cvGetSize(ans.img).height/2;
+	double fc=2500;///3.79*2.83;//  =摄像头焦距/像素宽度；
 	double alfa=atan((r0-rd)/fc);
 	double beta=atan((cd-c0)/fc*cos(alfa));
-	int Z=(c-c0)*sin(beta)-(r-r0)*sin(alfa)*cos(beta)+cos(alfa)*cos(beta)*fc;
+	int Z=ceil((c-c0)*sin(beta)-(r-r0)*sin(alfa)*cos(beta)+cos(alfa)*cos(beta)*fc);
 	Z=Z/((r-r0)*cos(alfa)+sin(alfa)*fc);
 	Z*=H;
 	return Z;
