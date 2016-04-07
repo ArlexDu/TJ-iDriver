@@ -15,6 +15,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 import edu.happy.roadrecord.R;
 
 public class LoginActivity extends Activity {
@@ -64,9 +65,13 @@ public class LoginActivity extends Activity {
 				Editor editor = preferences.edit();
 				editor.putString("userid", msg.obj.toString());
 				editor.commit();
-				Intent intent = new Intent(LoginActivity.this, PeopleAnalyze.class);
-				startActivity(intent);
-				LoginActivity.this.finish();
+				if(!msg.obj.toString().equals("-100")){
+					Intent intent = new Intent(LoginActivity.this, PeopleAnalyze.class);
+					startActivity(intent);
+					LoginActivity.this.finish();
+				}else{
+					Toast.makeText(LoginActivity.this, "µÇÂ¼Ê§°Ü£¡", 1000).show();
+				}
 				break;
 			default:
 				break;
